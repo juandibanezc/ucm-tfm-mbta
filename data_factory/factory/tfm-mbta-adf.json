@@ -1,0 +1,9 @@
+{
+	"name": "tfm-mbta-adf",
+	"location": "eastus2",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "7820c83c-ebf9-41ac-bccb-f86059fbd5aa",
+		"tenantId": "2b079dc7-e2ea-45bc-9182-0fde14b549b1"
+	}
+}
