@@ -1,0 +1,13 @@
+{
+	"name": "MBTA API",
+	"properties": {
+		"description": "MBTA API",
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "https://api-v3.mbta.com/",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}
