@@ -37,6 +37,12 @@
 				]
 			}
 		],
+		"parameters": {
+			"apiKey": {
+				"type": "string",
+				"defaultValue": "43e5b7040aff44108378e7ff9d3a7e7c"
+			}
+		},
 		"annotations": []
 	}
 }
