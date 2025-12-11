@@ -1,0 +1,13 @@
+{
+	"name": "MBTA_API",
+	"properties": {
+		"description": "MBTA API for consuming",
+		"linkedServiceName": {
+			"referenceName": "MBTA API",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"schema": []
+	}
+}
