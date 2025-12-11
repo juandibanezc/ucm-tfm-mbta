@@ -38,6 +38,117 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "ConfigurationFile",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"dataset": {
+						"referenceName": "config_file",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "ReadEndpoints",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "ConfigurationFile",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('ConfigurationFile').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "CopyDataAPI",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "RestSource",
+									"httpRequestTimeout": "00:01:40",
+									"requestInterval": "00.00:00:00.010",
+									"requestMethod": "GET",
+									"paginationRules": {
+										"supportRFC5988": "true"
+									}
+								},
+								"sink": {
+									"type": "JsonSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings"
+									},
+									"formatSettings": {
+										"type": "JsonWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "MBTA_API",
+									"type": "DatasetReference",
+									"parameters": {
+										"dynamicRoute": {
+											"value": "@item().endpoint",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "landings",
+									"type": "DatasetReference",
+									"parameters": {
+										"route_folder": {
+											"value": "@item().entityName",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
 			}
 		],
 		"parameters": {
