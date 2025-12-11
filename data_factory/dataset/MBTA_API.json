@@ -6,8 +6,19 @@
 			"referenceName": "MBTA API",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"dynamicRoute": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": {
+				"value": "@dataset().dynamicRoute",
+				"type": "Expression"
+			}
+		},
 		"schema": []
 	}
 }

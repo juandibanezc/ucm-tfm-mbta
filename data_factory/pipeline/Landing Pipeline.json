@@ -21,7 +21,10 @@
 						"requestInterval": "00.00:00:00.010",
 						"requestMethod": "GET",
 						"additionalHeaders": {
-							"": ""
+							"x-api-key": {
+								"value": "@pipeline().parameters.apiKey",
+								"type": "Expression"
+							}
 						},
 						"paginationRules": {
 							"supportRFC5988": "true"
