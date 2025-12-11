@@ -149,11 +149,92 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"route_folder": {
-								"value": "route_patterns/@{formatDateTime(utcNow(), 'yyyy-MM-dd')}.json",
+								"value": "route_patterns",
 								"type": "Expression"
 							}
 						}
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "RoutePattern",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "routePatternFile",
+						"dependencyConditions": [
+							"Succeeded"
+						]
 					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('routePatternFile').output.value.data",
+						"type": "Expression"
+					},
+					"batchCount": 10,
+					"activities": [
+						{
+							"name": "CopyRoutePatterns",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "RestSource",
+									"httpRequestTimeout": "00:01:40",
+									"requestInterval": "00.00:00:00.010",
+									"requestMethod": "GET",
+									"paginationRules": {
+										"supportRFC5988": "true"
+									}
+								},
+								"sink": {
+									"type": "JsonSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings"
+									},
+									"formatSettings": {
+										"type": "JsonWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "MBTA_API",
+									"type": "DatasetReference",
+									"parameters": {
+										"dynamicRoute": {
+											"value": "@concat('/trips?route_pattern=', item().id)",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "landings",
+									"type": "DatasetReference",
+									"parameters": {
+										"route_folder": {
+											"value": "@concat('trips/', item().id)",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
 				}
 			}
 		],
