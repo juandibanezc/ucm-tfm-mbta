@@ -40,7 +40,7 @@
 					{
 						"activity": "ConfigurationFile",
 						"dependencyConditions": [
-							"Completed"
+							"Succeeded"
 						]
 					}
 				],
@@ -111,6 +111,49 @@
 							]
 						}
 					]
+				}
+			},
+			{
+				"name": "routePatternFile",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "ReadEndpoints",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"dataset": {
+						"referenceName": "landings",
+						"type": "DatasetReference",
+						"parameters": {
+							"route_folder": {
+								"value": "route_patterns/@{formatDateTime(utcNow(), 'yyyy-MM-dd')}.json",
+								"type": "Expression"
+							}
+						}
+					}
 				}
 			}
 		],
