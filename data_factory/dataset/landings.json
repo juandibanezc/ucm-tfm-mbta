@@ -5,11 +5,25 @@
 			"referenceName": "Landing",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"route_folder": {
+				"type": "string",
+				"defaultValue": "@item().entityName"
+			}
+		},
 		"annotations": [],
 		"type": "Json",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@{formatDateTime(utcNow(), 'yyyy-MM-dd')}.json",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().route_folder",
+					"type": "Expression"
+				},
 				"container": "landing"
 			}
 		},
