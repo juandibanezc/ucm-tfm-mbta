@@ -171,7 +171,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('routePatternFile').output.data",
+						"value": "@activity('routePatternFile').output.firstRow.data",
 						"type": "Expression"
 					},
 					"batchCount": 10,
