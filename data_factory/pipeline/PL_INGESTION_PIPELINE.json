@@ -5,7 +5,14 @@
 			{
 				"name": "configFile",
 				"type": "Lookup",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "timeStampSet",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -118,7 +125,177 @@
 											"type": "Expression"
 										},
 										"fileName": {
-											"value": "@concat(\n    item().entityName,\n    '_',\n    formatDateTime(utcNow(), 'yyyyMMddHHmmss'),\n    '.json'\n)",
+											"value": "@concat(\n    item().entityName,\n    '_',\n    variables('currentTimestamp'),\n    '.json'\n)",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"name": "timeStampSet",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "currentTimestamp",
+					"value": {
+						"value": "@formatDateTime(utcNow(), 'yyyyMMddHHmmss')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "routePatternFile",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "readEndpoints",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"dataset": {
+						"referenceName": "DS_AZBS_LANDING",
+						"type": "DatasetReference",
+						"parameters": {
+							"endpointFolder": "route_patterns",
+							"yearFolder": {
+								"value": "@formatDateTime(utcNow(), 'yyyy')",
+								"type": "Expression"
+							},
+							"monthFolder": {
+								"value": "@formatDateTime(utcNow(), 'MM')",
+								"type": "Expression"
+							},
+							"dayFolder": {
+								"value": "@formatDateTime(utcNow(), 'dd')",
+								"type": "Expression"
+							},
+							"fileName": {
+								"value": "@concat(\n    'route_patterns_',\n    variables('currentTimestamp'),\n    '.json'\n)",
+								"type": "Expression"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "extractTrips",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "routePatternFile",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('routePatternFile').output.firstRow.data",
+						"type": "Expression"
+					},
+					"isSequential": false,
+					"activities": [
+						{
+							"name": "extractEndpointTrips",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "RestSource",
+									"httpRequestTimeout": "00:01:40",
+									"requestInterval": "00.00:00:00.010",
+									"requestMethod": "GET",
+									"paginationRules": {
+										"supportRFC5988": "true"
+									}
+								},
+								"sink": {
+									"type": "JsonSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings",
+										"maxConcurrentConnections": 20
+									},
+									"formatSettings": {
+										"type": "JsonWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_REST_MBTA_API",
+									"type": "DatasetReference",
+									"parameters": {
+										"dynamicUrl": {
+											"value": "@concat('/trips?route_pattern=', item().id)",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_AZBS_LANDING",
+									"type": "DatasetReference",
+									"parameters": {
+										"endpointFolder": {
+											"value": "@item().entityName",
+											"type": "Expression"
+										},
+										"yearFolder": {
+											"value": "@formatDateTime(utcNow(), 'yyyy')",
+											"type": "Expression"
+										},
+										"monthFolder": {
+											"value": "@formatDateTime(utcNow(), 'MM')",
+											"type": "Expression"
+										},
+										"dayFolder": {
+											"value": "@formatDateTime(utcNow(), 'dd')",
+											"type": "Expression"
+										},
+										"fileName": {
+											"value": "@concat(\n    'trips_',\n    item().id,\n    '_',\n    variables('currentTimestamp'),\n    '.json'\n)",
 											"type": "Expression"
 										}
 									}
@@ -129,6 +306,11 @@
 				}
 			}
 		],
+		"variables": {
+			"currentTimestamp": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
