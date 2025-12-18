@@ -1,0 +1,12 @@
+{
+	"name": "DS_REST_MBTA_API",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_REST_MBTA_API",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"schema": []
+	}
+}
