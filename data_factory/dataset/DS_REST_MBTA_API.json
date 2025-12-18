@@ -5,6 +5,11 @@
 			"referenceName": "LS_REST_MBTA_API",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"dinamycEndpoint": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "RestResource",
 		"schema": []
