@@ -118,7 +118,7 @@
 											"type": "Expression"
 										},
 										"fileName": {
-											"value": "@concat(\n    item().entityName,\n    '_',\n    formatDateTime(utcNow(), 'yyyyMMddHHmmss')\n)",
+											"value": "@concat(\n    item().entityName,\n    '_',\n    formatDateTime(utcNow(), 'yyyyMMddHHmmss'),\n    '.json'\n)",
 											"type": "Expression"
 										}
 									}
