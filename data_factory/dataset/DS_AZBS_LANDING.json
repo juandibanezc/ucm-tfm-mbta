@@ -1,0 +1,27 @@
+{
+	"name": "DS_AZBS_LANDING",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AZBS_LANDING",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"endpointFolder": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": {
+					"value": "@dataset().endpointFolder",
+					"type": "Expression"
+				},
+				"container": "landing"
+			}
+		},
+		"schema": {}
+	}
+}

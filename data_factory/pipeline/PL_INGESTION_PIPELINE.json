@@ -78,7 +78,13 @@
 							"inputs": [
 								{
 									"referenceName": "DS_REST_MBTA_API",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"dynamicUrl": {
+											"value": "@item().endpoint",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						}
