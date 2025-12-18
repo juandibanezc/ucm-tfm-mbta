@@ -1,0 +1,29 @@
+{
+	"name": "DS_AZBS_CONFIG",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AZBS_LANDING",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "endpoint_configuration.json",
+				"container": "config"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"endpoint": {
+					"type": "string"
+				},
+				"entityName": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}
