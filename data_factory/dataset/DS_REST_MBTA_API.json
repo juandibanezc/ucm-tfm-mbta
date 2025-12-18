@@ -6,12 +6,18 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"dinamycEndpoint": {
+			"dynamicUrl": {
 				"type": "string"
 			}
 		},
 		"annotations": [],
 		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": {
+				"value": "@dataset().dynamicUrl",
+				"type": "Expression"
+			}
+		},
 		"schema": []
 	}
 }
