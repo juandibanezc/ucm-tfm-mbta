@@ -8,6 +8,18 @@
 		"parameters": {
 			"endpointFolder": {
 				"type": "string"
+			},
+			"yearFolder": {
+				"type": "string"
+			},
+			"monthFolder": {
+				"type": "string"
+			},
+			"dayFolder": {
+				"type": "string"
+			},
+			"fileName": {
+				"type": "string"
 			}
 		},
 		"annotations": [],
@@ -15,8 +27,12 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().fileName",
+					"type": "Expression"
+				},
 				"folderPath": {
-					"value": "@dataset().endpointFolder",
+					"value": "@concat(\r\n    dataset().endpointFolder,\r\n    '/',\r\n    dataset().yearFolder,\r\n    '/',\r\n    dataset().monthFolder,\r\n    '/',\r\n    dataset().dayFolder\r\n)",
 					"type": "Expression"
 				},
 				"container": "landing"
