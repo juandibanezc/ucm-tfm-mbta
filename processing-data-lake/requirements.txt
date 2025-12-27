@@ -1,0 +1,4 @@
+# Default kedro dependencies
+kedro==0.19.4
+kedro-datasets==3.0.0
+hdfs==2.7.3

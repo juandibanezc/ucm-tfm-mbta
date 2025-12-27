@@ -1,0 +1,9 @@
+routes@spark:
+  type: kedro_datasets.spark.SparkDataset
+  # Estructura: wasbs://<nombre_contenedor>@<nombre_cuenta>.blob.core.windows.net/<ruta_al_archivo_o_carpeta>
+  filepath: abfs://landing@tfmmbtasta.dfs.core.windows.net/routes/*/*/*/routes_.json # Check if this can be a parameter later
+  file_format: json
+  credentials: azure_blob_auth
+  load_args:
+    inferSchema: True
+    multiLine: true
