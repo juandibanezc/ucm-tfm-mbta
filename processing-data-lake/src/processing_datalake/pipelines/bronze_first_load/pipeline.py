@@ -2,16 +2,41 @@
 
 from kedro.pipeline import Pipeline, node, pipeline
 
+from processing_datalake.pipelines.bronze_first_load.nodes.data_ingestion import (
+    process_table,
+)
+
 
 def create_pipeline(**kwargs) -> Pipeline:
     """Creates the bronze pipeline"""
     return pipeline(
         [
             node(
-                func=lambda x: x,
-                inputs="raw_data",
-                outputs="bronze_data",
-                name="bronze_data_ingestion_node",
-            )
+                func=process_table,
+                inputs=[
+                    "landing_routes@spark",
+                    "params:catalog_info_bronze_routes",
+                ],
+                outputs="bronze_routes@spark",
+                name="routes_bronze_first_load_node",
+            ),
+            node(
+                func=process_table,
+                inputs=[
+                    "landing_route_patterns@spark",
+                    "params:catalog_info_bronze_route_patterns",
+                ],
+                outputs="bronze_route_patterns@spark",
+                name="route_pattern_bronze_first_load_node",
+            ),
+            node(
+                func=process_table,
+                inputs=[
+                    "landing_stops@spark",
+                    "params:catalog_info_bronze_stops",
+                ],
+                outputs="bronze_stops@spark",
+                name="stop_bronze_first_load_node",
+            ),
         ]
     )

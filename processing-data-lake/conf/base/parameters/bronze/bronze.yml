@@ -1,0 +1,41 @@
+catalog_info_bronze_routes:
+  columns:
+    - data.id AS id
+    - data.attributes.description
+    - data.attributes.direction_destinations
+    - data.attributes.direction_names
+    - data.attributes.fare_class
+    - data.attributes.listed_route
+    - data.attributes.long_name
+    - data.attributes.short_name
+    - data.relationships.agency.data.id as agency_id
+    - data.relationships.line.data.id as line_id
+
+catalog_info_bronze_route_patterns:
+  columns:
+    - data.id AS id
+    - data.attributes.name
+    - data.attributes.direction_id
+    - data.attributes.canonical
+    - data.attributes.time_desc
+    - data.attributes.typicality
+    - data.relationships.route.data.id as route_id
+    - data.relationships.representative_trip.data.id as rp_trip_id
+
+catalog_info_bronze_stops:
+  columns:
+    - data.id AS id
+    - data.attributes.description
+    - data.attributes.address
+    - data.attributes.at_street
+    - data.attributes.latitude
+    - data.attributes.longitude
+    - data.attributes.municipality
+    - data.attributes.location_type
+    - data.attributes.name
+    - data.attributes.wheelchair_boarding
+    - data.attributes.on_street
+    - data.attributes.platform_code
+    - data.attributes.platform_name
+    - data.relationships.parent_station.data.id as parent_station_id
+    - data.relationships.zone.data.id as zone_id
