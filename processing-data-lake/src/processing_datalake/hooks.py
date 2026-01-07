@@ -22,16 +22,16 @@ class KedroSparkContext(KedroContext):
         config_loader: AbstractConfigLoader,
         hook_manager: PluginManager,
         env: str = None,
-        runtime_params: Dict[str, Any] = None,
+        extra_params: Dict[str, Any] = None,
     ):
         logger.info("Creating Kedro Context")
-        if runtime_params and "connect_profile" in runtime_params:
-            self._connect_profile = runtime_params.pop("connect_profile")
+        if extra_params and "connect_profile" in extra_params:
+            self._connect_profile = extra_params.pop("connect_profile")
         else:
             self._connect_profile = None
         super().__init__(
             project_path, config_loader, env, package_name, hook_manager,
-            runtime_params
+            extra_params
         )
         self._spark_session = None
         self._package_name = (

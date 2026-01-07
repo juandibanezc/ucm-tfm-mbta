@@ -1,49 +1,31 @@
 [build-system]
-requires = [
-    "setuptools",
-]
+requires = [ "setuptools",]
 build-backend = "setuptools.build_meta"
 
 [project]
-requires-python = ">=3.10"
-name = "processing_data_lake"
+name = "processing_datalake"
 readme = "README.md"
-dynamic = [
-    "version",
-]
-dependencies = [
-    "ipython>=8.10",
-    "jupyterlab>=3.0",
-    "notebook",
-    "kedro[jupyter]~=1.1.1",
-    "kedro-datasets[pandas-csvdataset, pandas-exceldataset, pandas-parquetdataset, spark-sparkdataset, plotly-plotlydataset, plotly-jsondataset, matplotlib-matplotlibdataset]>=3.0",
-    "kedro-viz>=6.7.0",
-    "scikit-learn~=1.5.1",
-    "seaborn~=0.12.1",
-    "setuptools; python_version >= '3.12'",
-]
+dynamic = [ "dependencies", "version",]
 
 [project.scripts]
-processing-data-lake = "processing_data_lake.__main__:main"
-
-[project.entry-points."kedro.hooks"]
-
-[tool.setuptools.dynamic.version]
-attr = "processing_data_lake.__version__"
-
-[tool.setuptools.packages.find]
-where = [
-    "src",
-]
-namespaces = false
+processing-datalake = "processing_datalake.__main__:main"
 
 [tool.kedro]
-package_name = "processing_data_lake"
-project_name = "processing-data-lake"
-kedro_init_version = "1.1.1"
-tools = "['Data Structure', 'PySpark']"
+package_name = "processing_datalake"
+project_name = "Processing Data Lake"
+kedro_init_version = "0.19.4"
+tools = [ "Custom Logging", "Documentation", "Kedro Viz", "Testing",]
 example_pipeline = "False"
 source_dir = "src"
 
-[tool.kedro_telemetry]
-project_id = "c35cc458be804a81ad1cd716500542ad"
+[project.entry-points."kedro.hooks"]
+
+[tool.setuptools.dynamic.dependencies]
+file = "requirements.txt"
+
+[tool.setuptools.dynamic.version]
+attr = "processing_datalake.__version__"
+
+[tool.setuptools.packages.find]
+where = [ "src",]
+namespaces = false

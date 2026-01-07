@@ -159,3 +159,6 @@ venv.bak/
 
 # mlflow local runs
 mlruns/*
+
+notebooks/**
+!notebooks/.gitkeep

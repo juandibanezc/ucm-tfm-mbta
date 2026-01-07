@@ -6,7 +6,7 @@ https://docs.kedro.org/en/stable/kedro_project_setup/settings.html."""
 import os
 
 # Instantiated project hooks.
-from tfm_big_data.hooks import ContextHooks  # noqa: E402
+from processing_datalake.hooks import ContextHooks  # noqa: E402
 
 # Hooks are executed in a Last-In-First-Out (LIFO) order.
 HOOKS = (ContextHooks(),)
@@ -26,7 +26,7 @@ DISABLE_HOOKS_FOR_PLUGINS = (
 #     "path": "./sessions"
 # }
 
-from tfm_big_data.hooks import KedroSparkContext  # noqa: E402
+from processing_datalake.hooks import KedroSparkContext  # noqa: E402
 
 CONTEXT_CLASS = KedroSparkContext  # pylint: disable=invalid-name
 

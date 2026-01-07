@@ -1,6 +1,6 @@
 routes@spark:
   type: kedro_datasets.spark.SparkDataset
-  filepath: abfs://landing@tfmmbtasta.dfs.core.windows.net/routes/*/*/*/routes_.json # Check if this can be a parameter later
+  filepath: "${globals:datalake.landing}routes/*/*/*/routes_*.json"
   file_format: json
   credentials: azure_blob_auth
   load_args:
