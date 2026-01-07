@@ -5,6 +5,10 @@
 conf/local/**
 !conf/local/.gitkeep
 
+notebooks/
+
+*.ipynb
+
 # ignore potentially sensitive credentials files
 conf/**/*credentials*
 
@@ -159,6 +163,3 @@ venv.bak/
 
 # mlflow local runs
 mlruns/*
-
-notebooks/**
-!notebooks/.gitkeep
