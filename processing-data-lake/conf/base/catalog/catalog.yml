@@ -6,3 +6,21 @@ routes@spark:
   load_args:
     inferSchema: True
     multiLine: true
+
+route_patterns@spark:
+  type: kedro_datasets.spark.SparkDataset
+  filepath: "${globals:datalake.landing}route_patterns/*/*/*/route_patterns_*.json"
+  file_format: json
+  credentials: azure_blob_auth
+  load_args:
+    inferSchema: True
+    multiLine: true
+
+stops@spark:
+  type: kedro_datasets.spark.SparkDataset
+  filepath: "${globals:datalake.landing}stops/*/*/*/stops_*.json"
+  file_format: json
+  credentials: azure_blob_auth
+  load_args:
+    inferSchema: True
+    multiLine: true
