@@ -15,12 +15,10 @@ def single_table_processing(
     """Process single table dimension data."""
 
     columns = params.get("columns")
-    last_update_ts = params.get("last_ts")
 
     table = table.withColumn("data", F.explode(F.col("data")))
 
     source = table.selectExpr(*columns)
-    source = source.filter(F.col("source_file").contains(last_update_ts))
 
     return source
 
@@ -40,4 +38,10 @@ def process_table(
 
     source = single_table_processing(table, params)
 
-    return audit_cols(source, filename=True)
+    source = audit_cols(source, filename=True, scd_key=True)
+
+    last_update_ts = params.get("last_ts")
+
+    source = source.filter(F.col("source_file").contains(last_update_ts))
+
+    return source

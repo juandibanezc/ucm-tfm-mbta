@@ -3,7 +3,7 @@
 from kedro.pipeline import Pipeline, node, pipeline
 
 from processing_datalake.pipelines.bronze_first_load.nodes.data_ingestion import (
-    ingest_dimensions as ingest_dimensions,
+    process_table as ingest_dimensions,
 )
 
 
