@@ -1,4 +1,7 @@
 catalog_info_bronze_routes:
+  last_ts: ${last_ts}
+  keys:
+    - id
   columns:
     - data.id AS id
     - data.attributes.description
@@ -12,6 +15,9 @@ catalog_info_bronze_routes:
     - data.relationships.line.data.id as line_id
 
 catalog_info_bronze_route_patterns:
+  last_ts: ${last_ts}
+  keys:
+    - id
   columns:
     - data.id AS id
     - data.attributes.name
@@ -23,6 +29,9 @@ catalog_info_bronze_route_patterns:
     - data.relationships.representative_trip.data.id as rp_trip_id
 
 catalog_info_bronze_stops:
+  last_ts: ${last_ts}
+  keys:
+    - id
   columns:
     - data.id AS id
     - data.attributes.description
