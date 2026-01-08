@@ -3,7 +3,7 @@
 from kedro.pipeline import Pipeline, node, pipeline
 
 from processing_datalake.pipelines.bronze_first_load.nodes.data_ingestion import (
-    process_table,
+    ingest_dimensions as ingest_dimensions,
 )
 
 
@@ -12,7 +12,7 @@ def create_pipeline(**kwargs) -> Pipeline:
     return pipeline(
         [
             node(
-                func=process_table,
+                func=ingest_dimensions,
                 inputs=[
                     "landing_routes@spark",
                     "params:catalog_info_bronze_routes",
@@ -21,7 +21,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 name="routes_bronze_first_load_node",
             ),
             node(
-                func=process_table,
+                func=ingest_dimensions,
                 inputs=[
                     "landing_route_patterns@spark",
                     "params:catalog_info_bronze_route_patterns",
@@ -30,7 +30,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 name="route_pattern_bronze_first_load_node",
             ),
             node(
-                func=process_table,
+                func=ingest_dimensions,
                 inputs=[
                     "landing_stops@spark",
                     "params:catalog_info_bronze_stops",

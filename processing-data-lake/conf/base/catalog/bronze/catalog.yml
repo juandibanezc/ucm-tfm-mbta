@@ -1,5 +1,5 @@
 # TEMPLATES
-_raw_spark_dataset: &spark_dataset
+_bronze_spark_dataset: &spark_dataset
   type: kedro_datasets.spark.SparkDataset
   file_format: delta
   credentials: azure_blob_auth
@@ -8,7 +8,13 @@ _raw_spark_dataset: &spark_dataset
     mergeSchema: true
   metadata:
     kedro-viz:
-      layer: raw
+      layer: bronze
+
+_bronze_delta_dataset: &delta_dataset
+  type: kedro_datasets.spark.DeltaTableDataset
+  metadata:
+    kedro-viz:
+      layer: bronze
 
 # DATASETS
 bronze_routes@spark:
@@ -17,14 +23,47 @@ bronze_routes@spark:
   save_args:
     <<: *default_save_args
 
+bronze_routes@delta:
+  <<: *delta_dataset
+  filepath: "${globals:datalake.bronze}routes/"
+
+bronze_routes_true:
+  type: MemoryDataset
+  data: true
+  metadata:
+    kedro-viz:
+      layer: bronze
+
 bronze_route_patterns@spark:
   <<: *spark_dataset
   filepath: "${globals:datalake.bronze}route_patterns/"
   save_args:
     <<: *default_save_args
 
+bronze_route_patterns@delta:
+  <<: *delta_dataset
+  filepath: "${globals:datalake.bronze}route_patterns/"
+
+bronze_route_patterns_true:
+  type: MemoryDataset
+  data: true
+  metadata:
+    kedro-viz:
+      layer: bronze
+
 bronze_stops@spark:
   <<: *spark_dataset
   filepath: "${globals:datalake.bronze}stops/"
   save_args:
     <<: *default_save_args
+
+bronze_stops@delta:
+  <<: *delta_dataset
+  filepath: "${globals:datalake.bronze}stops/"
+
+bronze_stops_true:
+  type: MemoryDataset
+  data: true
+  metadata:
+    kedro-viz:
+      layer: bronze
