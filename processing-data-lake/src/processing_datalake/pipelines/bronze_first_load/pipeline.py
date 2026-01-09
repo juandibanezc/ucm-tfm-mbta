@@ -38,5 +38,23 @@ def create_pipeline(**kwargs) -> Pipeline:
                 outputs="bronze_stops@spark",
                 name="stop_bronze_first_load_node",
             ),
+            node(
+                func=ingest_dimensions,
+                inputs=[
+                    "landing_schedules@spark",
+                    "params:catalog_info_bronze_schedules",
+                ],
+                outputs="bronze_schedules@spark",
+                name="schedules_bronze_first_load_node",
+            ),
+            node(
+                func=ingest_dimensions,
+                inputs=[
+                    "landing_trips@spark",
+                    "params:catalog_info_bronze_trips",
+                ],
+                outputs="bronze_trips@spark",
+                name="trips_bronze_first_load_node",
+            ),
         ]
     )

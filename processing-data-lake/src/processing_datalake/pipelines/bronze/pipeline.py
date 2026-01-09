@@ -40,5 +40,25 @@ def create_pipeline(**kwargs) -> Pipeline:
                 outputs="bronze_stops_true",
                 name="stops_bronze",
             ),
+            node(
+                func=ingest_dimensions_current_load,
+                inputs=[
+                    "landing_schedules@spark",
+                    "params:catalog_info_bronze_schedules",
+                    "bronze_schedules@delta",
+                ],
+                outputs="bronze_schedules_true",
+                name="schedules_bronze",
+            ),
+            node(
+                func=ingest_dimensions_current_load,
+                inputs=[
+                    "landing_trips@spark",
+                    "params:catalog_info_bronze_trips",
+                    "bronze_trips@delta",
+                ],
+                outputs="bronze_trips_true",
+                name="trips_bronze",
+            ),
         ]
     )
