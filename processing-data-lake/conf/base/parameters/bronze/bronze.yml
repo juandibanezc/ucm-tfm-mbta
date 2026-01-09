@@ -1,7 +1,10 @@
-catalog_info_bronze_routes:
+_bronze_constants: &catalog_constant
   last_ts: ${last_ts}
   keys:
     - id
+
+catalog_info_bronze_routes:
+  <<: *catalog_constant
   columns:
     - data.id AS id
     - data.attributes.description
@@ -15,9 +18,7 @@ catalog_info_bronze_routes:
     - data.relationships.line.data.id as line_id
 
 catalog_info_bronze_route_patterns:
-  last_ts: ${last_ts}
-  keys:
-    - id
+  <<: *catalog_constant
   columns:
     - data.id AS id
     - data.attributes.name
@@ -29,9 +30,7 @@ catalog_info_bronze_route_patterns:
     - data.relationships.representative_trip.data.id as rp_trip_id
 
 catalog_info_bronze_stops:
-  last_ts: ${last_ts}
-  keys:
-    - id
+  <<: *catalog_constant
   columns:
     - data.id AS id
     - data.attributes.description
@@ -48,3 +47,34 @@ catalog_info_bronze_stops:
     - data.attributes.platform_name
     - data.relationships.parent_station.data.id as parent_station_id
     - data.relationships.zone.data.id as zone_id
+
+catalog_info_bronze_trips:
+  <<: *catalog_constant
+  columns:
+    - data.id AS id
+    - data.attributes.bikes_allowed
+    - data.attributes.block_id
+    - data.attributes.direction_id
+    - data.attributes.headsign
+    - data.attributes.revenue
+    - data.attributes.wheelchair_accessible
+    - data.relationships.route.data.id as route_id
+    - data.relationships.route_pattern.data.id as route_pattern_id
+    - data.relationships.service.data.id as service_id
+    - data.relationships.shape.data.id as shape_id
+
+catalog_info_bronze_schedules:
+  <<: *catalog_constant
+  columns:
+    - data.id AS id
+    - data.attributes.arrival_time
+    - data.attributes.departure_time
+    - data.attributes.direction_id
+    - data.attributes.drop_off_type
+    - data.attributes.pickup_type
+    - data.attributes.stop_headsign
+    - data.attributes.stop_sequence
+    - data.attributes.timepoint
+    - data.relationships.route.data.id as route_id
+    - data.relationships.stop.data.id as stop_id
+    - data.relationships.trip.data.id as trip_id

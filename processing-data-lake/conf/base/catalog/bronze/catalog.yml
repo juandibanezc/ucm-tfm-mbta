@@ -67,3 +67,37 @@ bronze_stops_true:
   metadata:
     kedro-viz:
       layer: bronze
+
+bronze_trips@spark:
+  <<: *spark_dataset
+  filepath: "${globals:datalake.bronze}trips/"
+  save_args:
+    <<: *default_save_args
+
+bronze_trips@delta:
+  <<: *delta_dataset
+  filepath: "${globals:datalake.bronze}trips/"
+
+bronze_trips_true:
+  type: MemoryDataset
+  data: true
+  metadata:
+    kedro-viz:
+      layer: bronze
+
+bronze_schedules@spark:
+  <<: *spark_dataset
+  filepath: "${globals:datalake.bronze}schedules/"
+  save_args:
+    <<: *default_save_args
+
+bronze_schedules@delta:
+  <<: *delta_dataset
+  filepath: "${globals:datalake.bronze}schedules/"
+
+bronze_schedules_true:
+  type: MemoryDataset
+  data: true
+  metadata:
+    kedro-viz:
+      layer: bronze

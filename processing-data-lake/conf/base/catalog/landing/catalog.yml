@@ -1,26 +1,37 @@
-landing_routes@spark:
+_landing_template: &landing_dataset
   type: kedro_datasets.spark.SparkDataset
-  filepath: "${globals:datalake.landing}routes/*/*/*/routes_*.json"
-  file_format: json
   credentials: azure_blob_auth
-  load_args:
-    inferSchema: True
+  file_format: json
+  load_args: &default_load_args
+    inferSchema: true
     multiLine: true
+
+landing_routes@spark:
+  <<: *landing_dataset
+  filepath: "${globals:datalake.landing}routes/*/*/*/routes_*.json"
+  load_args:
+    <<: *default_load_args
 
 landing_route_patterns@spark:
-  type: kedro_datasets.spark.SparkDataset
+  <<: *landing_dataset
   filepath: "${globals:datalake.landing}route_patterns/*/*/*/route_patterns_*.json"
-  file_format: json
-  credentials: azure_blob_auth
   load_args:
-    inferSchema: True
-    multiLine: true
+    <<: *default_load_args
 
 landing_stops@spark:
-  type: kedro_datasets.spark.SparkDataset
+  <<: *landing_dataset
   filepath: "${globals:datalake.landing}stops/*/*/*/stops_*.json"
-  file_format: json
-  credentials: azure_blob_auth
   load_args:
-    inferSchema: True
-    multiLine: true
+    <<: *default_load_args
+
+landing_trips@spark:
+  <<: *landing_dataset
+  filepath: "${globals:datalake.landing}trips/*/*/*/trips_*.json"
+  load_args:
+    <<: *default_load_args
+
+landing_schedules@spark:
+  <<: *landing_dataset
+  filepath: "${globals:datalake.landing}schedules/*/*/*/schedules_*.json"
+  load_args:
+    <<: *default_load_args
