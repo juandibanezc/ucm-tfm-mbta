@@ -340,7 +340,7 @@
 						"referenceName": "DS_AZBS_LANDING",
 						"type": "DatasetReference",
 						"parameters": {
-							"endpointFolder": "route",
+							"endpointFolder": "routes",
 							"yearFolder": "@formatDateTime(utcNow(), 'yyyy')",
 							"monthFolder": "@formatDateTime(utcNow(), 'MM')",
 							"dayFolder": "@formatDateTime(utcNow(), 'dd')",
