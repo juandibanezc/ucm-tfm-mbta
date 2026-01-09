@@ -304,6 +304,150 @@
 						}
 					]
 				}
+			},
+			{
+				"name": "routeFile",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "readEndpoints",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"dataset": {
+						"referenceName": "DS_AZBS_LANDING",
+						"type": "DatasetReference",
+						"parameters": {
+							"endpointFolder": "route",
+							"yearFolder": "@formatDateTime(utcNow(), 'yyyy')",
+							"monthFolder": "@formatDateTime(utcNow(), 'MM')",
+							"dayFolder": "@formatDateTime(utcNow(), 'dd')",
+							"fileName": {
+								"value": "@concat(     'route_',     variables('currentTimestamp'),     '.json' )",
+								"type": "Expression"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "extractRoute",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "routeFile",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('routeFile').output.firstRow.data",
+						"type": "Expression"
+					},
+					"isSequential": false,
+					"activities": [
+						{
+							"name": "extractEndpointSchedules",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "RestSource",
+									"httpRequestTimeout": "00:01:40",
+									"requestInterval": "00.00:00:00.010",
+									"requestMethod": "GET",
+									"paginationRules": {
+										"supportRFC5988": "true"
+									}
+								},
+								"sink": {
+									"type": "JsonSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings",
+										"maxConcurrentConnections": 20
+									},
+									"formatSettings": {
+										"type": "JsonWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_REST_MBTA_API",
+									"type": "DatasetReference",
+									"parameters": {
+										"dynamicUrl": {
+											"value": "@concat('/schedules?route=', item().id)",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_AZBS_LANDING",
+									"type": "DatasetReference",
+									"parameters": {
+										"endpointFolder": {
+											"value": "schedules",
+											"type": "Expression"
+										},
+										"yearFolder": {
+											"value": "@formatDateTime(utcNow(), 'yyyy')",
+											"type": "Expression"
+										},
+										"monthFolder": {
+											"value": "@formatDateTime(utcNow(), 'MM')",
+											"type": "Expression"
+										},
+										"dayFolder": {
+											"value": "@formatDateTime(utcNow(), 'dd')",
+											"type": "Expression"
+										},
+										"fileName": {
+											"value": "@concat(\n    'schedules_',\n    item().id,\n    '_',\n    variables('currentTimestamp'),\n    '.json'\n)",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
 			}
 		],
 		"variables": {
