@@ -345,7 +345,7 @@
 							"monthFolder": "@formatDateTime(utcNow(), 'MM')",
 							"dayFolder": "@formatDateTime(utcNow(), 'dd')",
 							"fileName": {
-								"value": "@concat(     'route_',     variables('currentTimestamp'),     '.json' )",
+								"value": "@concat(     'routes_',     variables('currentTimestamp'),     '.json' )",
 								"type": "Expression"
 							}
 						}
