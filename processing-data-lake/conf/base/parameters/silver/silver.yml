@@ -1,0 +1,39 @@
+catalog_info_silver_schedules:
+  checkpoint_file: ${last_ts}
+  schema:
+    arrival_time: timestamp
+    departure_time: timestamp
+    direction_id: integer
+    drop_off_type: bigint
+    pickup_type: bigint
+    stop_sequence: bigint
+    timepoint: boolean
+
+catalog_info_silver_trips:
+  checkpoint_file: ${last_ts}
+  schema:
+    id: bigint
+    direction_id: integer
+    bikes_allowed: integer
+    wheelchair_accessible: integer
+
+catalog_info_silver_stops:
+  checkpoint_file: ${last_ts}
+  schema:
+    location_type: integer
+    wheelchair_boarding: integer
+    latitude: decimal(9, 6)
+    longitude: decimal(9, 6)
+
+catalog_info_silver_route_patterns:
+  checkpoint_file: ${last_ts}
+  schema:
+    direction_id: integer
+    canonical: boolean
+    typicality: integer
+
+catalog_info_silver_routes:
+  checkpoint_file: ${last_ts}
+  route_table: true
+  schema:
+    agency_id: integer
