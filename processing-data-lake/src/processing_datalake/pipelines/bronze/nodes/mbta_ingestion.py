@@ -11,7 +11,7 @@ from processing_datalake.extras.utils.scd_functions import (
     scd1_merge_delta_write,
     audit_cols,
 )
-from processing_datalake.pipelines.bronze_first_load.nodes.data_ingestion import (
+from processing_datalake.pipelines.bronze_first_load.nodes.mbta_ingestion import (
     process_table,
 )
 

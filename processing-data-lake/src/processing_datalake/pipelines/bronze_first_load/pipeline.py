@@ -2,7 +2,7 @@
 
 from kedro.pipeline import Pipeline, node, pipeline
 
-from processing_datalake.pipelines.bronze_first_load.nodes.data_ingestion import (
+from processing_datalake.pipelines.bronze_first_load.nodes.mbta_ingestion import (
     process_table as ingest_dimensions,
 )
 
@@ -19,6 +19,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 ],
                 outputs="bronze_routes@spark",
                 name="routes_bronze_first_load_node",
+                tags=["bronze", "first_load", "mbta"],
             ),
             node(
                 func=ingest_dimensions,
@@ -28,6 +29,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 ],
                 outputs="bronze_route_patterns@spark",
                 name="route_pattern_bronze_first_load_node",
+                tags=["bronze", "first_load", "mbta"],
             ),
             node(
                 func=ingest_dimensions,
@@ -37,6 +39,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 ],
                 outputs="bronze_stops@spark",
                 name="stop_bronze_first_load_node",
+                tags=["bronze", "first_load", "mbta"],
             ),
             node(
                 func=ingest_dimensions,
@@ -46,6 +49,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 ],
                 outputs="bronze_schedules@spark",
                 name="schedules_bronze_first_load_node",
+                tags=["bronze", "first_load", "mbta"],
             ),
             node(
                 func=ingest_dimensions,
@@ -55,6 +59,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 ],
                 outputs="bronze_trips@spark",
                 name="trips_bronze_first_load_node",
+                tags=["bronze", "first_load", "mbta"],
             ),
         ]
     )
