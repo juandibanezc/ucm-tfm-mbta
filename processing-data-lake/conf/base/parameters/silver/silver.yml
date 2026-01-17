@@ -1,4 +1,10 @@
+_catalog_silver_params: &default_params
+  last_ts: ${last_ts}
+  keys:
+    - id
+
 catalog_info_silver_schedules:
+  <<: *default_params
   schema:
     arrival_time: timestamp
     departure_time: timestamp
@@ -9,6 +15,7 @@ catalog_info_silver_schedules:
     timepoint: boolean
 
 catalog_info_silver_trips:
+  <<: *default_params
   schema:
     id: bigint
     direction_id: integer
@@ -16,6 +23,7 @@ catalog_info_silver_trips:
     wheelchair_accessible: integer
 
 catalog_info_silver_stops:
+  <<: *default_params
   schema:
     location_type: integer
     wheelchair_boarding: integer
@@ -23,12 +31,14 @@ catalog_info_silver_stops:
     longitude: decimal(9, 6)
 
 catalog_info_silver_route_patterns:
+  <<: *default_params
   schema:
     direction_id: integer
     canonical: boolean
     typicality: integer
 
 catalog_info_silver_routes:
+  <<: *default_params
   route_table: true
   schema:
     agency_id: integer
