@@ -1,5 +1,4 @@
 catalog_info_silver_schedules:
-  checkpoint_file: ${last_ts}
   schema:
     arrival_time: timestamp
     departure_time: timestamp
@@ -10,7 +9,6 @@ catalog_info_silver_schedules:
     timepoint: boolean
 
 catalog_info_silver_trips:
-  checkpoint_file: ${last_ts}
   schema:
     id: bigint
     direction_id: integer
@@ -18,7 +16,6 @@ catalog_info_silver_trips:
     wheelchair_accessible: integer
 
 catalog_info_silver_stops:
-  checkpoint_file: ${last_ts}
   schema:
     location_type: integer
     wheelchair_boarding: integer
@@ -26,14 +23,12 @@ catalog_info_silver_stops:
     longitude: decimal(9, 6)
 
 catalog_info_silver_route_patterns:
-  checkpoint_file: ${last_ts}
   schema:
     direction_id: integer
     canonical: boolean
     typicality: integer
 
 catalog_info_silver_routes:
-  checkpoint_file: ${last_ts}
   route_table: true
   schema:
     agency_id: integer

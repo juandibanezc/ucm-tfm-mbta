@@ -15,7 +15,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 func=cleaning_mbta_tables,
                 inputs=[
                     "bronze_schedules@spark",
-                    "params:catalog_info_silver_schedules"
+                    "params:catalog_info_silver_schedules",
                 ],
                 outputs="silver_schedules@spark",
                 name="silver_schedules_first_load",
@@ -25,7 +25,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 func=cleaning_mbta_tables,
                 inputs=[
                     "bronze_trips@spark",
-                    "params:catalog_info_silver_trips"
+                    "params:catalog_info_silver_trips",
                 ],
                 outputs="silver_trips@spark",
                 name="silver_trips_first_load",
@@ -35,7 +35,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 func=cleaning_mbta_tables,
                 inputs=[
                     "bronze_stops@spark",
-                    "params:catalog_info_silver_stops"
+                    "params:catalog_info_silver_stops",
                 ],
                 outputs="silver_stops@spark",
                 name="silver_stops_first_load",
@@ -45,7 +45,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 func=cleaning_mbta_tables,
                 inputs=[
                     "bronze_route_patterns@spark",
-                    "params:catalog_info_silver_route_patterns"
+                    "params:catalog_info_silver_route_patterns",
                 ],
                 outputs="silver_route_patterns@spark",
                 name="silver_route_patterns_first_load",
@@ -55,7 +55,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 func=cleaning_mbta_tables,
                 inputs=[
                     "bronze_routes@spark",
-                    "params:catalog_info_silver_routes"
+                    "params:catalog_info_silver_routes",
                 ],
                 outputs="silver_routes@spark",
                 name="silver_routes_first_load",
