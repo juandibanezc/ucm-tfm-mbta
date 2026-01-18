@@ -5,7 +5,10 @@ from typing import Dict, Any
 import pyspark.sql.functions as F
 from pyspark.sql import DataFrame
 
-from processing_datalake.extras.utils.scd_functions import audit_cols
+from processing_datalake.extras.utils.scd_functions import (
+    audit_cols,
+    add_filename_column,
+)
 
 
 def single_table_processing(
@@ -36,9 +39,11 @@ def process_table(
         DataFrame: Processed table.
     """
 
-    source = single_table_processing(table, params)
+    table_ingest = single_table_processing(table, params)
 
-    source = audit_cols(source, filename=True, scd_key=True)
+    source = add_filename_column(source)
+
+    source = audit_cols(source, scd_key=True)
 
     last_update_ts = params.get("last_ts")
 

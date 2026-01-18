@@ -6,9 +6,18 @@ from pyspark.sql import DataFrame
 from delta.tables import DeltaTable
 
 
+def add_filename_column(
+    source: DataFrame,
+) -> DataFrame:
+    """Add source filename column to DataFrame."""
+
+    return source.withColumn(
+        "source_file", F.substring_index(F.input_file_name(), "/", -1)
+    )
+
+
 def audit_cols(
     source: DataFrame,
-    filename: bool = False,
     scd_key: bool = False,
 ) -> DataFrame:
     """Create audit columns for SCD."""
@@ -21,11 +30,6 @@ def audit_cols(
             "updated_ts": F.current_timestamp(),
         }
     )
-
-    if filename:
-        source = source.withColumn(
-            "source_file", F.substring_index(F.input_file_name(), "/", -1)
-        )
 
     if scd_key:
         source = source.withColumn(
@@ -46,6 +50,7 @@ def scd1_merge_delta_write(
     source: DataFrame,
     target: DeltaTable,
     keys: List[str],
+    extra_keys: str = None,
 ) -> None:
     """Write dimension data to delta table with SCD type 1 logic."""
 
@@ -56,10 +61,13 @@ def scd1_merge_delta_write(
         if col not in keys + audit_col
     ]
 
+    if extra_keys:
+        keys.append(extra_keys)
+
     merge_builder = target.alias("t").merge(
         source.alias("s"),
         condition=" AND ".join(
-            [f"t.{key} = s.{key}" for key in keys]
+            [f"t.{key}=s.{key}" for key in keys]
         ),
     )
 
@@ -67,7 +75,10 @@ def scd1_merge_delta_write(
         condition="s.scd_key <> t.scd_key",
         set=dict(
             **{col: f"s.{col}" for col in source_cols},
-            **{"updated_ts": "s.updated_ts"},
+            **{
+                "updated_ts": "s.updated_ts",
+                "scd_key": "s.scd_key",
+            },
         )
     ).whenNotMatchedInsert(
         values={col: f"s.{col}" for col in target.toDF().columns}

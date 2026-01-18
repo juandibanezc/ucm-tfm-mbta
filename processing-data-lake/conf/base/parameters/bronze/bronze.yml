@@ -65,6 +65,7 @@ catalog_info_bronze_trips:
 
 catalog_info_bronze_schedules:
   <<: *catalog_constant
+  extra_keys: source_file
   columns:
     - data.id AS id
     - data.attributes.arrival_time
