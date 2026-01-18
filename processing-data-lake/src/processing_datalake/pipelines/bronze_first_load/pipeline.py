@@ -14,7 +14,6 @@ def create_pipeline(**kwargs) -> Pipeline:
             node(
                 func=ingest_dimensions,
                 inputs=[
-                    "landing_routes@spark",
                     "params:catalog_info_bronze_routes",
                 ],
                 outputs="bronze_routes@spark",
@@ -24,7 +23,6 @@ def create_pipeline(**kwargs) -> Pipeline:
             node(
                 func=ingest_dimensions,
                 inputs=[
-                    "landing_route_patterns@spark",
                     "params:catalog_info_bronze_route_patterns",
                 ],
                 outputs="bronze_route_patterns@spark",
@@ -34,7 +32,6 @@ def create_pipeline(**kwargs) -> Pipeline:
             node(
                 func=ingest_dimensions,
                 inputs=[
-                    "landing_stops@spark",
                     "params:catalog_info_bronze_stops",
                 ],
                 outputs="bronze_stops@spark",
@@ -44,7 +41,6 @@ def create_pipeline(**kwargs) -> Pipeline:
             node(
                 func=ingest_dimensions,
                 inputs=[
-                    "landing_schedules@spark",
                     "params:catalog_info_bronze_schedules",
                 ],
                 outputs="bronze_schedules@spark",
@@ -54,7 +50,6 @@ def create_pipeline(**kwargs) -> Pipeline:
             node(
                 func=ingest_dimensions,
                 inputs=[
-                    "landing_trips@spark",
                     "params:catalog_info_bronze_trips",
                 ],
                 outputs="bronze_trips@spark",

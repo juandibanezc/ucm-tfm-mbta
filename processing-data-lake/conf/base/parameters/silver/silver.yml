@@ -5,7 +5,7 @@ _catalog_silver_params: &default_params
 
 catalog_info_silver_schedules:
   <<: *default_params
-  schedule_table: true
+  duplicate_table: true
   schema:
     arrival_time: timestamp
     departure_time: timestamp
@@ -17,6 +17,7 @@ catalog_info_silver_schedules:
 
 catalog_info_silver_trips:
   <<: *default_params
+  duplicate_table: true
   schema:
     id: bigint
     direction_id: integer

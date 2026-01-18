@@ -3,7 +3,6 @@
 from typing import Dict, Any
 
 import pyspark.sql.functions as F
-from pyspark.sql import DataFrame
 
 from delta.tables import DeltaTable
 
@@ -18,19 +17,17 @@ from processing_datalake.pipelines.bronze_first_load.nodes.mbta_ingestion import
 
 
 def ingest_current_load(
-    table: DataFrame,
     params: Dict[str, Any],
     target_table: DeltaTable,
 ) -> bool:
     """Ingest current load data into bronze layer with SCD1 logic.
 
     Args:
-        table (DataFrame): Input table to process.
         params (Dict[str, Any]): Parameters for processing.
         target_table (DeltaTable): Target delta table to write data.
     """
 
-    source_df = single_table_processing(table, params)
+    source_df = single_table_processing(params)
 
     source = add_filename_column(source_df)
 

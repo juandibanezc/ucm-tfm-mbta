@@ -5,6 +5,7 @@ _bronze_constants: &catalog_constant
 
 catalog_info_bronze_routes:
   <<: *catalog_constant
+  catalog_dataset: landing_routes@spark
   columns:
     - data.id AS id
     - data.attributes.description
@@ -19,6 +20,7 @@ catalog_info_bronze_routes:
 
 catalog_info_bronze_route_patterns:
   <<: *catalog_constant
+  catalog_dataset: landing_route_patterns@spark
   columns:
     - data.id AS id
     - data.attributes.name
@@ -31,6 +33,7 @@ catalog_info_bronze_route_patterns:
 
 catalog_info_bronze_stops:
   <<: *catalog_constant
+  catalog_dataset: landing_stops@spark
   columns:
     - data.id AS id
     - data.attributes.description
@@ -50,6 +53,8 @@ catalog_info_bronze_stops:
 
 catalog_info_bronze_trips:
   <<: *catalog_constant
+  extra_keys: source_file
+  catalog_dataset: landing_trips@spark
   columns:
     - data.id AS id
     - data.attributes.bikes_allowed
@@ -66,6 +71,7 @@ catalog_info_bronze_trips:
 catalog_info_bronze_schedules:
   <<: *catalog_constant
   extra_keys: source_file
+  catalog_dataset: landing_schedules@spark
   columns:
     - data.id AS id
     - data.attributes.arrival_time

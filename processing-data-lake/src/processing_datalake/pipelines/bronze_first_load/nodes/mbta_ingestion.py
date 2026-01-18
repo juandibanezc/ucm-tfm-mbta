@@ -1,10 +1,11 @@
 """Module to ingest json raw data into bronze layer."""
-
+from pathlib import PurePosixPath
 from typing import Dict, Any
 
 import pyspark.sql.functions as F
 from pyspark.sql import DataFrame
 
+from processing_datalake.extras.utils import get_dataset
 from processing_datalake.extras.utils.scd_functions import (
     audit_cols,
     add_filename_column,
@@ -12,10 +13,27 @@ from processing_datalake.extras.utils.scd_functions import (
 
 
 def single_table_processing(
-    table: DataFrame,
     params: Dict[str, Any]
 ) -> DataFrame:
     """Process single table dimension data."""
+    last_update_ts = params.get("last_ts")
+    last_update_ts_formatted = str(last_update_ts)
+    year = last_update_ts_formatted[:4]
+    month = last_update_ts_formatted[4:6]
+    day = last_update_ts_formatted[6:8]
+    catalog_table = params.get("catalog_dataset")
+
+    table_catalog = get_dataset(catalog_table)
+    file_path = str(table_catalog._filepath).format(
+        last_ts=last_update_ts,
+        year=year,
+        month=month,
+        day=day,
+    )
+    file_path_formatted = PurePosixPath(file_path)
+    table_catalog._filepath = file_path_formatted
+
+    table: DataFrame = table_catalog.load()
 
     columns = params.get("columns")
 
@@ -27,21 +45,19 @@ def single_table_processing(
 
 
 def process_table(
-    table: DataFrame,
     params: Dict[str, Any]
 ) -> DataFrame:
     """Process all tables dimension data first load
     Args:
-        table (DataFrame): Input table to process
         params (Dict[str, Any]): Parameters for processing
 
     Returns:
         DataFrame: Processed table.
     """
 
-    table_ingest = single_table_processing(table, params)
+    table_ingest = single_table_processing(params)
 
-    source = add_filename_column(source)
+    source = add_filename_column(table_ingest)
 
     source = audit_cols(source, scd_key=True)
 

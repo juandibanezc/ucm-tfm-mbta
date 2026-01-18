@@ -12,6 +12,25 @@ from pluggy import PluginManager
 logger = logging.getLogger(__name__)
 
 
+def _set_context(context: KedroContext):
+    """Helper function to set the current Kedro context.
+
+    Args:
+        context: The current Kedro context.
+    """
+    global _current_context
+    _current_context = context
+
+
+def get_context() -> KedroContext:
+    """Get the current Kedro context.
+
+    Returns:
+        The current Kedro context.
+    """
+    return _current_context
+
+
 class KedroSparkContext(KedroContext):
     """Custom kedro context which initializes the Spark Session."""
 
@@ -138,5 +157,6 @@ class ContextHooks:  # pylint: disable=too-few-public-methods
             context: The current Kedro context.
         """
         _ = CurrentKedroContext(context)
+        _set_context(context)
         for c in self._callbacks:
             c(context)
