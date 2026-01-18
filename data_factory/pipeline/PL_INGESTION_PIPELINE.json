@@ -153,62 +153,6 @@
 				}
 			},
 			{
-				"name": "routePatternFile",
-				"type": "Lookup",
-				"dependsOn": [
-					{
-						"activity": "readEndpoints",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "JsonSource",
-						"storeSettings": {
-							"type": "AzureBlobStorageReadSettings",
-							"recursive": true,
-							"enablePartitionDiscovery": false
-						},
-						"formatSettings": {
-							"type": "JsonReadSettings"
-						}
-					},
-					"dataset": {
-						"referenceName": "DS_AZBS_LANDING",
-						"type": "DatasetReference",
-						"parameters": {
-							"endpointFolder": "route_patterns",
-							"yearFolder": {
-								"value": "@formatDateTime(utcNow(), 'yyyy')",
-								"type": "Expression"
-							},
-							"monthFolder": {
-								"value": "@formatDateTime(utcNow(), 'MM')",
-								"type": "Expression"
-							},
-							"dayFolder": {
-								"value": "@formatDateTime(utcNow(), 'dd')",
-								"type": "Expression"
-							},
-							"fileName": {
-								"value": "@concat(\n    'route_patterns_',\n    variables('currentTimestamp'),\n    '.json'\n)",
-								"type": "Expression"
-							}
-						}
-					}
-				}
-			},
-			{
 				"name": "extractTrips",
 				"type": "ForEach",
 				"dependsOn": [
