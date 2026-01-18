@@ -46,6 +46,9 @@ def create_trips_metrics_table(
         ),
         how="left",
     ).select(
+        F.to_date(F.date_format(
+            F.col("s.departure_time"), "yyyy-MM-dd"
+        )).alias("service_date"),
         F.col("s.trip_id"),
         F.col("s.route_id"),
         F.col("s.direction_id"),
