@@ -213,7 +213,7 @@
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "routePatternFile",
+						"activity": "routeFile",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -222,7 +222,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('routePatternFile').output.firstRow.data",
+						"value": "@activity('routeFile').output.firstRow.data",
 						"type": "Expression"
 					},
 					"isSequential": false,
@@ -267,7 +267,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"dynamicUrl": {
-											"value": "@concat('/trips?route_pattern=', item().id)",
+											"value": "@concat('/trips?route=', item().id)",
 											"type": "Expression"
 										}
 									}
@@ -353,7 +353,7 @@
 				}
 			},
 			{
-				"name": "extractRoute",
+				"name": "extractSchedules",
 				"type": "ForEach",
 				"dependsOn": [
 					{
