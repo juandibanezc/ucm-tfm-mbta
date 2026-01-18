@@ -1,5 +1,5 @@
-"""tfm-big-data file for ensuring the package is executable
-as `tfm-big-data` and `python -m tfm_big_data`
+"""processing-data-lake file for ensuring the package is executable
+as `processing-data-lake` and `python -m processing_datalake`
 """
 import sys
 from pathlib import Path
