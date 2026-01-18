@@ -35,6 +35,7 @@ def transformation(
     """
     schema = params.get("schema")
     route_table = params.get("route_table")
+    schedule_table = params.get("schedule_table")
 
     audit_cols = ["created_ts", "updated_ts", "source_file", "scd_key"]
 
@@ -53,6 +54,10 @@ def transformation(
             "direction_destination_1": F.col("direction_destinations")[0],
             "direction_destination_2": F.col("direction_destinations")[1],
         }).drop("direction_names", "direction_destinations")
+
+    if schedule_table:
+        # Special handling for schedule_table to remove duplicates.
+        table = table.distinct()
 
     table_cleaned = table.withColumns(casted_columns)
 
