@@ -1,0 +1,20 @@
+{
+	"name": "DS_REST_NWS_API",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_REST_NWS_API",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"dynamicUrl": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": "@dataset().dynamicUrl"
+		},
+		"schema": []
+	}
+}
