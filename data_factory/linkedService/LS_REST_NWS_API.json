@@ -1,0 +1,13 @@
+{
+	"name": "LS_REST_NWS_API",
+	"properties": {
+		"description": "National Weather Service API",
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "https://api.weather.gov/",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}
