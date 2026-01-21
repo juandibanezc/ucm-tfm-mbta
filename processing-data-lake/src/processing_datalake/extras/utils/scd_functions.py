@@ -4,6 +4,7 @@ from typing import List
 import pyspark.sql.functions as F
 from pyspark.sql import DataFrame
 from delta.tables import DeltaTable
+from processing_datalake.hooks import get_context
 
 
 def add_filename_column(
@@ -85,3 +86,23 @@ def scd1_merge_delta_write(
     )
 
     merge_builder.execute()
+
+
+def incremental_load(
+    source: DataFrame,
+    partition_predicate: str,
+    catalog_table: str,
+) -> None:
+    """Perform incremental load from source to target delta table."""
+
+    context = get_context()
+
+    catalog = context.catalog
+
+    catalog_dataset = catalog._get_dataset(catalog_table)
+
+    catalog_dataset._save_args['replaceWhere'] = partition_predicate
+
+    source = audit_cols(source)
+
+    catalog_dataset.save(source)

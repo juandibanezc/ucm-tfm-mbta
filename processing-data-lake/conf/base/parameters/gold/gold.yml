@@ -1,0 +1,3 @@
+catalog_info_trips_metrics:
+  last_ts: ${last_ts}
+  catalog_dataset: gold_trips_metrics@spark
