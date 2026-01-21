@@ -155,6 +155,8 @@
 			{
 				"name": "extractTrips",
 				"type": "ForEach",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "routeFile",
@@ -252,6 +254,8 @@
 			{
 				"name": "routeFile",
 				"type": "Lookup",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "readEndpoints",
@@ -299,6 +303,8 @@
 			{
 				"name": "extractSchedules",
 				"type": "ForEach",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "routeFile",
@@ -384,6 +390,145 @@
 										},
 										"fileName": {
 											"value": "@concat(\n    'schedules_',\n    item().id,\n    '_',\n    variables('currentTimestamp'),\n    '.json'\n)",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"name": "stopsFile",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "readEndpoints",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"dataset": {
+						"referenceName": "DS_AZBS_LANDING",
+						"type": "DatasetReference",
+						"parameters": {
+							"endpointFolder": "stops",
+							"yearFolder": "@formatDateTime(utcNow(), 'yyyy')",
+							"monthFolder": "@formatDateTime(utcNow(), 'MM')",
+							"dayFolder": "@formatDateTime(utcNow(), 'dd')",
+							"fileName": {
+								"value": "@concat(     'stops_',     variables('currentTimestamp'),     '.json' )",
+								"type": "Expression"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "extractNWS",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "stopsFile",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('stopsFile').output.firstRow.data",
+						"type": "Expression"
+					},
+					"isSequential": false,
+					"batchCount": 10,
+					"activities": [
+						{
+							"name": "extractPoints",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "RestSource",
+									"httpRequestTimeout": "00:01:40",
+									"requestInterval": "00.00:00:00.010",
+									"requestMethod": "GET",
+									"paginationRules": {
+										"supportRFC5988": "true"
+									}
+								},
+								"sink": {
+									"type": "JsonSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings",
+										"maxConcurrentConnections": 10
+									},
+									"formatSettings": {
+										"type": "JsonWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_REST_NWS_API",
+									"type": "DatasetReference",
+									"parameters": {
+										"dynamicUrl": {
+											"value": "@concat(\n    'points/',\n    item().attributes.latitude,\n    ',',\n    item().attributes.longitude\n)",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_AZBS_LANDING",
+									"type": "DatasetReference",
+									"parameters": {
+										"endpointFolder": "points",
+										"yearFolder": "@formatDateTime(utcNow(), 'yyyy')",
+										"monthFolder": {
+											"value": "@formatDateTime(utcNow(), 'MM')",
+											"type": "Expression"
+										},
+										"dayFolder": {
+											"value": "@formatDateTime(utcNow(), 'dd')",
+											"type": "Expression"
+										},
+										"fileName": {
+											"value": "@concat(     'points_',     item().id,     '_',     variables('currentTimestamp'),     '.json' )",
 											"type": "Expression"
 										}
 									}
