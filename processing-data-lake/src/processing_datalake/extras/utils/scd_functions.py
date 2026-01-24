@@ -4,7 +4,7 @@ from typing import List
 import pyspark.sql.functions as F
 from pyspark.sql import DataFrame
 from delta.tables import DeltaTable
-from processing_datalake.hooks import get_context
+from processing_datalake.hooks import get_catalog_dataset
 
 
 def add_filename_column(
@@ -95,11 +95,7 @@ def incremental_load(
 ) -> None:
     """Perform incremental load from source to target delta table."""
 
-    context = get_context()
-
-    catalog = context.catalog
-
-    catalog_dataset = catalog._get_dataset(catalog_table)
+    catalog_dataset = get_catalog_dataset(catalog_table)
 
     catalog_dataset._save_args['replaceWhere'] = partition_predicate
 

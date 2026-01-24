@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any, Dict, Union, List, Callable
 
 from kedro.config import AbstractConfigLoader
+from kedro.io.core import AbstractDataset
 from kedro.framework.hooks import hook_impl
 from kedro.framework.context import KedroContext
 from pluggy import PluginManager
@@ -29,6 +30,35 @@ def get_context() -> KedroContext:
         The current Kedro context.
     """
     return _current_context
+
+
+def get_credentials(key: str) -> Union[str, Dict[str, Any], None]:
+    """Get credentials from the Kedro context.
+
+    Args:
+        key: The key of the credentials to retrieve.
+    Returns:
+        The credentials associated with the given key.
+    """
+
+    context = get_context()
+    credentials = context._get_config_credentials()
+    return credentials.get(key)
+
+
+def get_catalog_dataset(key: str) -> AbstractDataset:
+    """Get a dataset from the Kedro catalog.
+    Args:
+        key: The key of the dataset to retrieve.
+    Returns:
+        The dataset associated with the given key.
+    """
+
+    context = get_context()
+
+    catalog = context.catalog
+
+    return catalog._get_dataset(key)
 
 
 class KedroSparkContext(KedroContext):
