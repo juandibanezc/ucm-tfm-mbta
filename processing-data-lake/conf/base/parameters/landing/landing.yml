@@ -1,4 +1,6 @@
 catalog_info_landing_one_endpoint:
+  url: https://api-v3.mbta.com/{endpoint}
+  credentials_name: mbta_api_auth
   extractions:
     - catalog_dataset: landing_routes@json
       endpoint: routes

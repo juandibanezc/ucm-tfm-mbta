@@ -19,23 +19,23 @@ landing_last_execution@json:
 
 landing_routes@json:
   <<: *landing_ext_dataset
-  filepath: "${globals:datalake.landing}routes/{year}/{month}/{day}/routes_{last_ts}.json"
+  filepath: "${globals:datalake.landing_ingest}routes/{year}/{month}/{day}/routes_{last_ts}.json"
 
 landing_route_patterns@json:
   <<: *landing_ext_dataset
-  filepath: "${globals:datalake.landing}route_patterns/{year}/{month}/{day}/route_patterns_{last_ts}.json"
+  filepath: "${globals:datalake.landing_ingest}route_patterns/{year}/{month}/{day}/route_patterns_{last_ts}.json"
 
 landing_stops@json:
   <<: *landing_ext_dataset
-  filepath: "${globals:datalake.landing}stops/{year}/{month}/{day}/stops_{last_ts}.json"
+  filepath: "${globals:datalake.landing_ingest}stops/{year}/{month}/{day}/stops_{last_ts}.json"
 
 landing_trips@json:
   <<: *landing_ext_dataset
-  filepath: "${globals:datalake.landing}trips/{year}/{month}/{day}/trips_{id}_{last_ts}.json"
+  filepath: "${globals:datalake.landing_ingest}trips/{year}/{month}/{day}/trips_{id}_{last_ts}.json"
 
 landing_schedules@json:
   <<: *landing_ext_dataset
-  filepath: "${globals:datalake.landing}schedules/{year}/{month}/{day}/schedules_{id}_{last_ts}.json"
+  filepath: "${globals:datalake.landing_ingest}schedules/{year}/{month}/{day}/schedules_{id}_{last_ts}.json"
 
 endpoints_extraction_true:
   type: MemoryDataset

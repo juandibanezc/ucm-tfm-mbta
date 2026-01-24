@@ -2,7 +2,8 @@
 
 from kedro.pipeline import Pipeline, node, pipeline
 from processing_datalake.pipelines.landing.nodes.extract_mbta_api import (
-    last_ts
+    last_ts,
+    extract_mbta_endpoint,
 )
 
 
@@ -17,5 +18,15 @@ def create_pipeline(**kwargs) -> Pipeline:
                 name="extract_last_timestamp",
                 tags=["landing", "mbta"],
             ),
+            node(
+                func=extract_mbta_endpoint,
+                inputs=[
+                    "params:catalog_info_landing_one_endpoint",
+                    "landing_last_execution@json",
+                ],
+                outputs="endpoints_extraction_true",
+                name="extract_mbta_endpoints",
+                tags=["landing", "mbta"],
+            )
         ]
     )
