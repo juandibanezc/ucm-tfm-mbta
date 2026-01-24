@@ -1,4 +1,4 @@
-"""Gold pipeline definition."""
+"""Silver pipeline definition."""
 
 from kedro.pipeline import Pipeline, node, pipeline
 
