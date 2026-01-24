@@ -118,17 +118,20 @@ jobs:
               if pp_el is None:
                   print('Could not find publishProfile element in publish profile XML')
                   sys.exit(0)
-              publishUrl = pp_el.attrib.get('publishUrl') or pp_el.attrib.get('publishUrl')
-              userName = pp_el.attrib.get('userName')
-              userPWD = pp_el.attrib.get('userPWD') or pp_el.attrib.get('userPassword') or pp_el.attrib.get('password')
-              print('SCM_URL=', publishUrl)
-              # print masked user info
-              if userName:
+                publishUrl = pp_el.attrib.get('publishUrl') or pp_el.attrib.get('publishUrl')
+                # Ensure publishUrl includes a scheme for curl usage
+                if publishUrl and not publishUrl.startswith(('http://', 'https://')):
+                  publishUrl = 'https://' + publishUrl
+                userName = pp_el.attrib.get('userName')
+                userPWD = pp_el.attrib.get('userPWD') or pp_el.attrib.get('userPassword') or pp_el.attrib.get('password')
+                print('SCM_URL=', publishUrl)
+                # print masked user info
+                if userName:
                   print('userName found')
-              if userPWD:
+                if userPWD:
                   print('userPWD found')
-              # write to temp file for curl usage by shell
-              with open('kudu_creds.sh','w') as f:
+                # write to temp file for curl usage by shell
+                with open('kudu_creds.sh','w') as f:
                   f.write("USER='{}'\nPASS='{}'\nSCM='{}'\n".format(userName or '', userPWD or '', publishUrl or ''))
           except Exception as e:
               print('Failed to parse publish profile:', e)
