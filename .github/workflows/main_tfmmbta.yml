@@ -41,9 +41,8 @@ jobs:
 
       - name: Zip artifact for deployment
         run: |
-          cd realtime_ingestion
-          zip -r ../release.zip . -x venv/\*
-          cd ..
+          # Create a zip that contains the realtime_ingestion folder at top-level
+          zip -r release.zip realtime_ingestion -x "realtime_ingestion/venv/*"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -67,6 +66,12 @@ jobs:
         run: |
           unzip release.zip
           rm release.zip
+
+      - name: Inspect deploy workspace
+        run: |
+          echo "Files in workspace:"; ls -la
+          echo "Checking for realtime_ingestion directory..."
+          if [ -d realtime_ingestion ]; then echo "FOUND: realtime_ingestion"; ls -la realtime_ingestion; else echo "MISSING: realtime_ingestion"; fi
 
       - name: 'Deploy to Azure Functions (publish-profile)'
         uses: Azure/functions-action@v1
