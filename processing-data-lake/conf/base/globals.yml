@@ -1,5 +1,5 @@
 datalake:
   landing: abfs://landing@tfmmbtasta.dfs.core.windows.net/
-  bronze: abfs://lakehouse@tfmmbtasta.dfs.core.windows.net/bronze/
-  silver: abfs://lakehouse@tfmmbtasta.dfs.core.windows.net/silver/
-  gold: abfs://lakehouse@tfmmbtasta.dfs.core.windows.net/gold/
+  bronze: tfmmbtaadbpr.bronze.
+  silver: tfmmbtaadbpr.silver.
+  gold: tfmmbtaadbpr.gold.

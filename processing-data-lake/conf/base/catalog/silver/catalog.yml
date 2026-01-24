@@ -19,13 +19,13 @@ _silver_delta_dataset: &delta_dataset
 # DATASETS
 silver_routes@spark:
   <<: *spark_dataset
-  filepath: "${globals:datalake.silver}routes/"
+  filepath: "${globals:datalake.silver}routes"
   save_args:
     <<: *default_save_args
 
 silver_routes@delta:
   <<: *delta_dataset
-  filepath: "${globals:datalake.silver}routes/"
+  filepath: "${globals:datalake.silver}routes"
 
 silver_routes_true:
   type: MemoryDataset
@@ -36,13 +36,13 @@ silver_routes_true:
 
 silver_route_patterns@spark:
   <<: *spark_dataset
-  filepath: "${globals:datalake.silver}route_patterns/"
+  filepath: "${globals:datalake.silver}route_patterns"
   save_args:
     <<: *default_save_args
 
 silver_route_patterns@delta:
   <<: *delta_dataset
-  filepath: "${globals:datalake.silver}route_patterns/"
+  filepath: "${globals:datalake.silver}route_patterns"
 
 silver_route_patterns_true:
   type: MemoryDataset
@@ -53,13 +53,13 @@ silver_route_patterns_true:
 
 silver_stops@spark:
   <<: *spark_dataset
-  filepath: "${globals:datalake.silver}stops/"
+  filepath: "${globals:datalake.silver}stops"
   save_args:
     <<: *default_save_args
 
 silver_stops@delta:
   <<: *delta_dataset
-  filepath: "${globals:datalake.silver}stops/"
+  filepath: "${globals:datalake.silver}stops"
 
 silver_stops_true:
   type: MemoryDataset
@@ -70,13 +70,13 @@ silver_stops_true:
 
 silver_trips@spark:
   <<: *spark_dataset
-  filepath: "${globals:datalake.silver}trips/"
+  filepath: "${globals:datalake.silver}trips"
   save_args:
     <<: *default_save_args
 
 silver_trips@delta:
   <<: *delta_dataset
-  filepath: "${globals:datalake.silver}trips/"
+  filepath: "${globals:datalake.silver}trips"
 
 silver_trips_true:
   type: MemoryDataset
@@ -87,13 +87,13 @@ silver_trips_true:
 
 silver_schedules@spark:
   <<: *spark_dataset
-  filepath: "${globals:datalake.silver}schedules/"
+  filepath: "${globals:datalake.silver}schedules"
   save_args:
     <<: *default_save_args
 
 silver_schedules@delta:
   <<: *delta_dataset
-  filepath: "${globals:datalake.silver}schedules/"
+  filepath: "${globals:datalake.silver}schedules"
 
 silver_schedules_true:
   type: MemoryDataset

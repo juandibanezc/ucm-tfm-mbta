@@ -19,13 +19,13 @@ _gold_delta_dataset: &delta_dataset
 # DATASETS
 gold_trips_metrics@spark:
   <<: *spark_dataset
-  filepath: "${globals:datalake.gold}trips_metrics/"
+  filepath: "${globals:datalake.gold}trips_metrics"
   save_args:
     <<: *default_save_args
 
 gold_trips_metrics@delta:
   <<: *delta_dataset
-  filepath: "${globals:datalake.gold}trips_metrics/"
+  filepath: "${globals:datalake.gold}trips_metrics"
 
 gold_trips_metrics_true:
   type: MemoryDataset

@@ -19,13 +19,13 @@ _bronze_delta_dataset: &delta_dataset
 # DATASETS
 bronze_routes@spark:
   <<: *spark_dataset
-  filepath: "${globals:datalake.bronze}routes/"
+  filepath: "${globals:datalake.bronze}routes"
   save_args:
     <<: *default_save_args
 
 bronze_routes@delta:
   <<: *delta_dataset
-  filepath: "${globals:datalake.bronze}routes/"
+  filepath: "${globals:datalake.bronze}routes"
 
 bronze_routes_true:
   type: MemoryDataset
@@ -36,13 +36,13 @@ bronze_routes_true:
 
 bronze_route_patterns@spark:
   <<: *spark_dataset
-  filepath: "${globals:datalake.bronze}route_patterns/"
+  filepath: "${globals:datalake.bronze}route_patterns"
   save_args:
     <<: *default_save_args
 
 bronze_route_patterns@delta:
   <<: *delta_dataset
-  filepath: "${globals:datalake.bronze}route_patterns/"
+  filepath: "${globals:datalake.bronze}route_patterns"
 
 bronze_route_patterns_true:
   type: MemoryDataset
@@ -53,13 +53,13 @@ bronze_route_patterns_true:
 
 bronze_stops@spark:
   <<: *spark_dataset
-  filepath: "${globals:datalake.bronze}stops/"
+  filepath: "${globals:datalake.bronze}stops"
   save_args:
     <<: *default_save_args
 
 bronze_stops@delta:
   <<: *delta_dataset
-  filepath: "${globals:datalake.bronze}stops/"
+  filepath: "${globals:datalake.bronze}stops"
 
 bronze_stops_true:
   type: MemoryDataset
@@ -70,13 +70,13 @@ bronze_stops_true:
 
 bronze_trips@spark:
   <<: *spark_dataset
-  filepath: "${globals:datalake.bronze}trips/"
+  filepath: "${globals:datalake.bronze}trips"
   save_args:
     <<: *default_save_args
 
 bronze_trips@delta:
   <<: *delta_dataset
-  filepath: "${globals:datalake.bronze}trips/"
+  filepath: "${globals:datalake.bronze}trips"
 
 bronze_trips_true:
   type: MemoryDataset
@@ -87,13 +87,13 @@ bronze_trips_true:
 
 bronze_schedules@spark:
   <<: *spark_dataset
-  filepath: "${globals:datalake.bronze}schedules/"
+  filepath: "${globals:datalake.bronze}schedules"
   save_args:
     <<: *default_save_args
 
 bronze_schedules@delta:
   <<: *delta_dataset
-  filepath: "${globals:datalake.bronze}schedules/"
+  filepath: "${globals:datalake.bronze}schedules"
 
 bronze_schedules_true:
   type: MemoryDataset
