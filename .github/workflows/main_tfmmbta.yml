@@ -87,16 +87,67 @@ jobs:
         env:
           PUBLISH_PROFILE: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8040E6E7255F44948B652706B3A73DF0 }}
         run: |
-          echo "Running Kudu diagnostics"
-          # extract publish profile credentials
-          USER=$(echo "$PUBLISH_PROFILE" | sed -n 's/.*<publishProfile.*userName=\"\([^\"]*\)\".*/\1/p')
-          PASS=$(echo "$PUBLISH_PROFILE" | sed -n 's/.*password=\"\([^\"]*\)\".*/\1/p')
-          SCM_URL=$(echo "$PUBLISH_PROFILE" | sed -n 's/.*publishUrl=\"\([^\"]*\)\".*/\1/p')
-          if [ -z "$USER" ] || [ -z "$PASS" ] || [ -z "$SCM_URL" ]; then
-            echo "Could not parse publish profile for diagnostics"; exit 0
+          echo "Running improved Kudu diagnostics"
+          # Print zip contents to verify archive layout (safe)
+          if [ -f release.zip ]; then
+            echo "Listing release.zip contents:";
+            unzip -l release.zip || true
+          else
+            echo "release.zip not found"
           fi
-          echo "SCM_URL=$SCM_URL"
-          # test zipdeploy endpoint
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -u "$USER:$PASS" "$SCM_URL/api/zipdeploy" -I)
+
+          # Parse publish profile XML using Python to extract publishUrl, userName and userPWD
+          python - <<'PY'
+          import os,sys,xml.etree.ElementTree as ET
+          pp = os.environ.get('PUBLISH_PROFILE')
+          if not pp:
+              print('PUBLISH_PROFILE not set')
+              sys.exit(0)
+          try:
+              root = ET.fromstring(pp)
+              # Find first publishProfile element
+              pp_el = root.find('.//publishProfile')
+              if pp_el is None:
+                  # Maybe the XML string is the element itself
+                  if root.tag == 'publishData':
+                      pp_el = root.find('.//publishProfile')
+              if pp_el is None:
+                  # Try parsing as a single element
+                  if root.tag == 'publishProfile':
+                      pp_el = root
+              if pp_el is None:
+                  print('Could not find publishProfile element in publish profile XML')
+                  sys.exit(0)
+              publishUrl = pp_el.attrib.get('publishUrl') or pp_el.attrib.get('publishUrl')
+              userName = pp_el.attrib.get('userName')
+              userPWD = pp_el.attrib.get('userPWD') or pp_el.attrib.get('userPassword') or pp_el.attrib.get('password')
+              print('SCM_URL=', publishUrl)
+              # print masked user info
+              if userName:
+                  print('userName found')
+              if userPWD:
+                  print('userPWD found')
+              # write to temp file for curl usage by shell
+              with open('kudu_creds.sh','w') as f:
+                  f.write("USER='{}'\nPASS='{}'\nSCM='{}'\n".format(userName or '', userPWD or '', publishUrl or ''))
+          except Exception as e:
+              print('Failed to parse publish profile:', e)
+              sys.exit(0)
+          PY
+
+          # Source credentials (keeps them in the runner only)
+          if [ -f kudu_creds.sh ]; then
+            source kudu_creds.sh
+          else
+            echo "No kudu_creds.sh created; skipping Kudu HTTP checks"; exit 0
+          fi
+
+          if [ -z "$SCM" ] || [ -z "$USER" ] || [ -z "$PASS" ]; then
+            echo "Parsed credentials incomplete; SCM:$SCM USER:$USER PASS:${#PASS} chars"; exit 0
+          fi
+
+          echo "Testing Kudu /api/zipdeploy endpoint for $SCM"
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -u "$USER:$PASS" "$SCM/api/zipdeploy" -I)
           echo "Kudu /api/zipdeploy HTTP status: $STATUS"
-          curl -v -u "$USER:$PASS" "$SCM_URL/api/vfs/" || true
+          echo "Listing Kudu VFS root (may be large):"
+          curl -s -u "$USER:$PASS" "$SCM/api/vfs/" || true
