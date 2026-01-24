@@ -40,7 +40,10 @@ jobs:
       # Optional: Add step to run tests here
 
       - name: Zip artifact for deployment
-        run: zip -r release.zip realtime_ingestion/
+        run: |
+          cd realtime_ingestion
+          zip -r ../release.zip . -x venv/\*
+          cd ..
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
