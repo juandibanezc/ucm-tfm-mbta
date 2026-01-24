@@ -1,5 +1,4 @@
 _catalog_silver_params: &default_params
-  last_ts: ${last_ts}
   keys:
     - id
 

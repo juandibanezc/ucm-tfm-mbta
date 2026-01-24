@@ -1,5 +1,4 @@
 _bronze_constants: &catalog_constant
-  last_ts: ${last_ts}
   keys:
     - id
 
