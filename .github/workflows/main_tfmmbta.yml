@@ -74,5 +74,5 @@ jobs:
         with:
           app-name: 'tfmmbta'
           slot-name: 'Production'
-          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+          package: '.'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8040E6E7255F44948B652706B3A73DF0 }}
