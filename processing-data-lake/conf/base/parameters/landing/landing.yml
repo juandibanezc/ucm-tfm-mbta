@@ -1,0 +1,8 @@
+catalog_info_landing_one_endpoint:
+  extractions:
+    - catalog_dataset: landing_routes@json
+      endpoint: routes
+    - catalog_dataset: landing_stops@json
+      endpoint: stops
+    - catalog_dataset: landing_route_patterns@json
+      endpoint: route_patterns
