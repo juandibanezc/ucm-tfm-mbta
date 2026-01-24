@@ -67,12 +67,31 @@ jobs:
         run: |
           unzip release.zip
           rm release.zip
-        
-      - name: 'Deploy to Azure Functions'
+
+      - name: 'Deploy to Azure Functions (publish-profile)'
         uses: Azure/functions-action@v1
         id: deploy-to-function
         with:
           app-name: 'tfmmbta'
           slot-name: 'Production'
-          package: '.'
+          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8040E6E7255F44948B652706B3A73DF0 }}
+
+      - name: Kudu diagnostic (runs only on failure)
+        if: failure()
+        env:
+          PUBLISH_PROFILE: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8040E6E7255F44948B652706B3A73DF0 }}
+        run: |
+          echo "Running Kudu diagnostics"
+          # extract publish profile credentials
+          USER=$(echo "$PUBLISH_PROFILE" | sed -n 's/.*<publishProfile.*userName=\"\([^\"]*\)\".*/\1/p')
+          PASS=$(echo "$PUBLISH_PROFILE" | sed -n 's/.*password=\"\([^\"]*\)\".*/\1/p')
+          SCM_URL=$(echo "$PUBLISH_PROFILE" | sed -n 's/.*publishUrl=\"\([^\"]*\)\".*/\1/p')
+          if [ -z "$USER" ] || [ -z "$PASS" ] || [ -z "$SCM_URL" ]; then
+            echo "Could not parse publish profile for diagnostics"; exit 0
+          fi
+          echo "SCM_URL=$SCM_URL"
+          # test zipdeploy endpoint
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -u "$USER:$PASS" "$SCM_URL/api/zipdeploy" -I)
+          echo "Kudu /api/zipdeploy HTTP status: $STATUS"
+          curl -v -u "$USER:$PASS" "$SCM_URL/api/vfs/" || true
