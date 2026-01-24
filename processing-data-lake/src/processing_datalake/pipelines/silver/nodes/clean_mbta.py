@@ -18,6 +18,7 @@ from processing_datalake.pipelines.silver_first_load.nodes.clean_mbta_tables imp
 def clean_current_load(
     table: DataFrame,
     params: Dict[str, Any],
+    last_timestamp: Dict[str, str],
     target_table: DeltaTable,
 ) -> bool:
     """Clean current load data into silver layer with SCD1 logic.
@@ -27,7 +28,7 @@ def clean_current_load(
         params (Dict[str, Any]): Parameters for processing.
         target_table (DeltaTable): Target delta table to write data.
     """
-    last_update_ts = params.get("last_ts")
+    last_update_ts = last_timestamp.get("last_ts")
 
     table = table.filter(F.col("source_file").contains(last_update_ts))
 

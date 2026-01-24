@@ -18,22 +18,24 @@ from processing_datalake.pipelines.bronze_first_load.nodes.mbta_ingestion import
 
 def ingest_current_load(
     params: Dict[str, Any],
+    last_timestamp: Dict[str, str],
     target_table: DeltaTable,
 ) -> bool:
     """Ingest current load data into bronze layer with SCD1 logic.
 
     Args:
         params (Dict[str, Any]): Parameters for processing.
+        last_timestamp (Dict[str, str]): Dictionary containing the last execution timestamp.
         target_table (DeltaTable): Target delta table to write data.
     """
 
-    source_df = single_table_processing(params)
+    source_df = single_table_processing(params, last_timestamp)
 
     source = add_filename_column(source_df)
 
     source = audit_cols(source, scd_key=True)
 
-    last_update_ts = params.get("last_ts")
+    last_update_ts = last_timestamp.get("last_ts")
 
     source = source.filter(F.col("source_file").contains(last_update_ts))
 

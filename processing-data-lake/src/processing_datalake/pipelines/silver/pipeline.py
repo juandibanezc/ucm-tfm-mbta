@@ -16,6 +16,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 inputs=[
                     "bronze_schedules@spark",
                     "params:catalog_info_silver_schedules",
+                    "landing_last_execution@json",
                     "silver_schedules@delta",
                 ],
                 outputs="silver_schedules_true",
@@ -27,6 +28,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 inputs=[
                     "bronze_trips@spark",
                     "params:catalog_info_silver_trips",
+                    "landing_last_execution@json",
                     "silver_trips@delta",
                 ],
                 outputs="silver_trips_true",
@@ -38,6 +40,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 inputs=[
                     "bronze_stops@spark",
                     "params:catalog_info_silver_stops",
+                    "landing_last_execution@json",
                     "silver_stops@delta",
                 ],
                 outputs="silver_stops_true",
@@ -49,6 +52,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 inputs=[
                     "bronze_route_patterns@spark",
                     "params:catalog_info_silver_route_patterns",
+                    "landing_last_execution@json",
                     "silver_route_patterns@delta",
                 ],
                 outputs="silver_route_patterns_true",
@@ -60,6 +64,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 inputs=[
                     "bronze_routes@spark",
                     "params:catalog_info_silver_routes",
+                    "landing_last_execution@json",
                     "silver_routes@delta",
                 ],
                 outputs="silver_routes_true",

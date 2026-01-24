@@ -13,11 +13,11 @@ from processing_datalake.extras.utils.scd_functions import (
 
 
 def single_table_processing(
-    params: Dict[str, Any]
+    params: Dict[str, Any],
+    last_update_ts: Dict[str, Any],
 ) -> DataFrame:
     """Process single table dimension data."""
-    last_update_ts = params.get("last_ts")
-    last_update_ts_formatted = str(last_update_ts)
+    last_update_ts_formatted = last_update_ts.get("last_ts")
     year = last_update_ts_formatted[:4]
     month = last_update_ts_formatted[4:6]
     day = last_update_ts_formatted[6:8]
@@ -25,7 +25,7 @@ def single_table_processing(
 
     table_catalog = get_dataset(catalog_table)
     file_path = str(table_catalog._filepath).format(
-        last_ts=last_update_ts,
+        last_ts=last_update_ts_formatted,
         year=year,
         month=month,
         day=day,
@@ -45,7 +45,8 @@ def single_table_processing(
 
 
 def process_table(
-    params: Dict[str, Any]
+    params: Dict[str, Any],
+    last_update_ts: Dict[str, Any],
 ) -> DataFrame:
     """Process all tables dimension data first load
     Args:
@@ -55,13 +56,11 @@ def process_table(
         DataFrame: Processed table.
     """
 
-    table_ingest = single_table_processing(params)
+    table_ingest = single_table_processing(params, last_update_ts)
 
     source = add_filename_column(table_ingest)
 
     source = audit_cols(source, scd_key=True)
-
-    last_update_ts = params.get("last_ts")
 
     source = source.filter(F.col("source_file").contains(last_update_ts))
 
