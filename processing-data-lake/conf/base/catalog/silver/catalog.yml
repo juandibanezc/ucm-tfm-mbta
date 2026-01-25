@@ -1,0 +1,103 @@
+# TEMPLATES
+_silver_spark_dataset: &spark_dataset
+  type: kedro_datasets.spark.SparkDataset
+  file_format: delta
+  credentials: azure_blob_auth
+  save_args: &default_save_args
+    mode: overwrite
+    mergeSchema: true
+  metadata:
+    kedro-viz:
+      layer: silver
+
+_silver_delta_dataset: &delta_dataset
+  type: kedro_datasets.spark.DeltaTableDataset
+  metadata:
+    kedro-viz:
+      layer: silver
+
+# DATASETS
+silver_routes@spark:
+  <<: *spark_dataset
+  filepath: "${globals:datalake.silver}routes"
+  save_args:
+    <<: *default_save_args
+
+silver_routes@delta:
+  <<: *delta_dataset
+  filepath: "${globals:datalake.silver}routes"
+
+silver_routes_true:
+  type: MemoryDataset
+  data: true
+  metadata:
+    kedro-viz:
+      layer: silver
+
+silver_route_patterns@spark:
+  <<: *spark_dataset
+  filepath: "${globals:datalake.silver}route_patterns"
+  save_args:
+    <<: *default_save_args
+
+silver_route_patterns@delta:
+  <<: *delta_dataset
+  filepath: "${globals:datalake.silver}route_patterns"
+
+silver_route_patterns_true:
+  type: MemoryDataset
+  data: true
+  metadata:
+    kedro-viz:
+      layer: silver
+
+silver_stops@spark:
+  <<: *spark_dataset
+  filepath: "${globals:datalake.silver}stops"
+  save_args:
+    <<: *default_save_args
+
+silver_stops@delta:
+  <<: *delta_dataset
+  filepath: "${globals:datalake.silver}stops"
+
+silver_stops_true:
+  type: MemoryDataset
+  data: true
+  metadata:
+    kedro-viz:
+      layer: silver
+
+silver_trips@spark:
+  <<: *spark_dataset
+  filepath: "${globals:datalake.silver}trips"
+  save_args:
+    <<: *default_save_args
+
+silver_trips@delta:
+  <<: *delta_dataset
+  filepath: "${globals:datalake.silver}trips"
+
+silver_trips_true:
+  type: MemoryDataset
+  data: true
+  metadata:
+    kedro-viz:
+      layer: silver
+
+silver_schedules@spark:
+  <<: *spark_dataset
+  filepath: "${globals:datalake.silver}schedules"
+  save_args:
+    <<: *default_save_args
+
+silver_schedules@delta:
+  <<: *delta_dataset
+  filepath: "${globals:datalake.silver}schedules"
+
+silver_schedules_true:
+  type: MemoryDataset
+  data: true
+  metadata:
+    kedro-viz:
+      layer: silver

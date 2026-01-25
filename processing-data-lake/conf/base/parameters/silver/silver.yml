@@ -1,0 +1,45 @@
+_catalog_silver_params: &default_params
+  keys:
+    - id
+
+catalog_info_silver_schedules:
+  <<: *default_params
+  duplicate_table: true
+  schema:
+    arrival_time: timestamp
+    departure_time: timestamp
+    direction_id: integer
+    drop_off_type: bigint
+    pickup_type: bigint
+    stop_sequence: bigint
+    timepoint: boolean
+
+catalog_info_silver_trips:
+  <<: *default_params
+  duplicate_table: true
+  schema:
+    id: bigint
+    direction_id: integer
+    bikes_allowed: integer
+    wheelchair_accessible: integer
+
+catalog_info_silver_stops:
+  <<: *default_params
+  schema:
+    location_type: integer
+    wheelchair_boarding: integer
+    latitude: decimal(9, 6)
+    longitude: decimal(9, 6)
+
+catalog_info_silver_route_patterns:
+  <<: *default_params
+  schema:
+    direction_id: integer
+    canonical: boolean
+    typicality: integer
+
+catalog_info_silver_routes:
+  <<: *default_params
+  route_table: true
+  schema:
+    agency_id: integer

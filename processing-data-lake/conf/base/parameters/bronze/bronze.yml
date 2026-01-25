@@ -1,0 +1,86 @@
+_bronze_constants: &catalog_constant
+  keys:
+    - id
+
+catalog_info_bronze_routes:
+  <<: *catalog_constant
+  catalog_dataset: landing_routes@spark
+  columns:
+    - data.id AS id
+    - data.attributes.description
+    - data.attributes.direction_destinations
+    - data.attributes.direction_names
+    - data.attributes.fare_class
+    - data.attributes.listed_route
+    - data.attributes.long_name
+    - data.attributes.short_name
+    - data.relationships.agency.data.id as agency_id
+    - data.relationships.line.data.id as line_id
+
+catalog_info_bronze_route_patterns:
+  <<: *catalog_constant
+  catalog_dataset: landing_route_patterns@spark
+  columns:
+    - data.id AS id
+    - data.attributes.name
+    - data.attributes.direction_id
+    - data.attributes.canonical
+    - data.attributes.time_desc
+    - data.attributes.typicality
+    - data.relationships.route.data.id as route_id
+    - data.relationships.representative_trip.data.id as rp_trip_id
+
+catalog_info_bronze_stops:
+  <<: *catalog_constant
+  catalog_dataset: landing_stops@spark
+  columns:
+    - data.id AS id
+    - data.attributes.description
+    - data.attributes.address
+    - data.attributes.at_street
+    - data.attributes.latitude
+    - data.attributes.longitude
+    - data.attributes.municipality
+    - data.attributes.location_type
+    - data.attributes.name
+    - data.attributes.wheelchair_boarding
+    - data.attributes.on_street
+    - data.attributes.platform_code
+    - data.attributes.platform_name
+    - data.relationships.parent_station.data.id as parent_station_id
+    - data.relationships.zone.data.id as zone_id
+
+catalog_info_bronze_trips:
+  <<: *catalog_constant
+  extra_keys: source_file
+  catalog_dataset: landing_trips@spark
+  columns:
+    - data.id AS id
+    - data.attributes.bikes_allowed
+    - data.attributes.block_id
+    - data.attributes.direction_id
+    - data.attributes.headsign
+    - data.attributes.revenue
+    - data.attributes.wheelchair_accessible
+    - data.relationships.route.data.id as route_id
+    - data.relationships.route_pattern.data.id as route_pattern_id
+    - data.relationships.service.data.id as service_id
+    - data.relationships.shape.data.id as shape_id
+
+catalog_info_bronze_schedules:
+  <<: *catalog_constant
+  extra_keys: source_file
+  catalog_dataset: landing_schedules@spark
+  columns:
+    - data.id AS id
+    - data.attributes.arrival_time
+    - data.attributes.departure_time
+    - data.attributes.direction_id
+    - data.attributes.drop_off_type
+    - data.attributes.pickup_type
+    - data.attributes.stop_headsign
+    - data.attributes.stop_sequence
+    - data.attributes.timepoint
+    - data.relationships.route.data.id as route_id
+    - data.relationships.stop.data.id as stop_id
+    - data.relationships.trip.data.id as trip_id

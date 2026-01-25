@@ -1,0 +1,4 @@
+-r requirements.txt
+kedro-viz~=9.0
+pyspark==3.5.0
+delta-spark==3.1.0
