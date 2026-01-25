@@ -44,6 +44,20 @@ endpoints_extraction_true:
     kedro-viz:
       layer: landing
 
+schedules_extraction_true:
+  type: MemoryDataset
+  data: true
+  metadata:
+    kedro-viz:
+      layer: landing
+
+trips_extraction_true:
+  type: MemoryDataset
+  data: true
+  metadata:
+    kedro-viz:
+      layer: landing
+
 landing_routes@spark:
   <<: *landing_dataset
   filepath: "${globals:datalake.landing}routes/{year}/{month}/{day}/routes_{last_ts}.json"

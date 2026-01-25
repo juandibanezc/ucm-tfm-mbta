@@ -4,3 +4,4 @@ kedro-datasets==3.0.0
 hdfs==2.7.3
 s3fs==2023.12.2
 adlfs==2025.8.0
+asyncio==4.0.0

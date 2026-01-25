@@ -8,3 +8,19 @@ catalog_info_landing_one_endpoint:
       endpoint: stops
     - catalog_dataset: landing_route_patterns@json
       endpoint: route_patterns
+
+catalog_info_landing_schedules:
+  url: https://api-v3.mbta.com/{endpoint}?{filter}={id}
+  filter: route
+  base_table: landing_routes@json
+  endpoint: schedules
+  target_catalog: landing_schedules@json
+  credentials_name: mbta_api_auth
+
+catalog_info_landing_trips:
+  url: https://api-v3.mbta.com/{endpoint}?{filter}={id}
+  filter: route
+  base_table: landing_routes@json
+  endpoint: trips
+  target_catalog: landing_trips@json
+  credentials_name: mbta_api_auth
