@@ -1,4 +1,5 @@
 datalake:
+  config: abfss://config/
   landing_ingest: abfs://landing/
   landing: abfs://landing@tfmmbtasta.dfs.core.windows.net/
   bronze: tfmmbtaadbpr.bronze.

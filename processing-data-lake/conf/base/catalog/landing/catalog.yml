@@ -15,7 +15,7 @@ _landing_template: &landing_dataset
 
 landing_last_execution@json:
   <<: *landing_ext_dataset
-  filepath: "${globals:datalake.landing}config/last_execution_metadata.json"
+  filepath: "${globals:datalake.config}/last_execution_metadata.json"
 
 landing_routes@json:
   <<: *landing_ext_dataset
