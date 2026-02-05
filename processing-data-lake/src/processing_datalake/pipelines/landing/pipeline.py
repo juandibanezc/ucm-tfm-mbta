@@ -34,6 +34,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 inputs=[
                     "params:catalog_info_landing_schedules",
                     "landing_last_execution@json",
+                    "endpoints_extraction_true",
                 ],
                 outputs="schedules_extraction_true",
                 name="extract_mbta_schedules",
@@ -44,6 +45,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 inputs=[
                     "params:catalog_info_landing_trips",
                     "landing_last_execution@json",
+                    "endpoints_extraction_true",
                 ],
                 outputs="trips_extraction_true",
                 name="extract_mbta_trips",

@@ -171,6 +171,7 @@ async def extract_mbta_endpoint_async(
 def extract_mbta_filter_endpoints(
     params: Dict[str, Any],
     last_exec: Dict[str, str],
+    *_: Any,
 ) -> bool:
     """Extract data from MBTA API endpoint and save to landing zone.
 
