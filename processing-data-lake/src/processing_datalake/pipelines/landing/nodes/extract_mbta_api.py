@@ -234,11 +234,11 @@ def extract_mbta_filter_endpoints(
 
     logger.info("Starting asynchronous extraction from MBTA API.")
 
-    asyncio.run(extract_mbta_endpoint_async(
+    result = asyncio.run(extract_mbta_endpoint_async(
         headers,
         metadata_list,
     ))
 
     logger.info("Asynchronous extraction completed.")
 
-    return True
+    return result
