@@ -54,6 +54,11 @@ async def get_endpoint_data(
         id=filter_id,
     )
 
+    if is_forecast:
+        key = "grid_id"
+
+    key = "stop_id_mbta"
+
     file_path_formatted = PurePosixPath(file_path)
     table_catalog._filepath = file_path_formatted
 
@@ -65,7 +70,7 @@ async def get_endpoint_data(
                 async with session.get(url_get, timeout=timeout) as response:
                     response.raise_for_status()
                     data = await response.json()
-                    data["stop_id_mbta"] = filter_id
+                    data[key] = filter_id
                     table_catalog.save(data)
 
                     if is_forecast:
