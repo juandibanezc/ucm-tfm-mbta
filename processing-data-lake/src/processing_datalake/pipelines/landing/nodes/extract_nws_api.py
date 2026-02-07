@@ -6,6 +6,8 @@ from pathlib import PurePosixPath
 
 import asyncio
 from asyncio import Semaphore
+
+import aiohttp
 from aiohttp import ClientSession
 
 from processing_datalake.hooks import (
@@ -17,15 +19,14 @@ logger = logging.getLogger(__name__)
 
 async def get_endpoint_data(
     metadata: Dict[str, Any],
-    headers: Dict[str, str],
     session: ClientSession,
     semaphore: Semaphore,
-) -> Union[Dict[str, str], bool]:
+    max_retries: int = 3,
+) -> Union[Dict[str, str], bool, None]:
     """Asynchronously fetch data from a specific NWS API endpoint.
 
     Args:
         metadata (Dict[str, Any]): Metadata for the API request.
-        headers (Dict[str, str]): Headers for the API request.
         session (ClientSession): The aiohttp client session.
         semaphore (Semaphore): Semaphore to limit concurrent requests.
 
@@ -57,57 +58,117 @@ async def get_endpoint_data(
     table_catalog._filepath = file_path_formatted
 
     async with semaphore:
-        async with session.get(url_get, headers=headers) as response:
-            response.raise_for_status()
-            data = await response.json()
-            data["stop_id"] = filter_id
-            table_catalog.save(data)
+        for attempt in range(max_retries + 1):
+            try:
+                # Individual request timeout
+                timeout = aiohttp.ClientTimeout(total=30, connect=10)
+                async with session.get(url_get, timeout=timeout) as response:
+                    response.raise_for_status()
+                    data = await response.json()
+                    data["stop_id_mbta"] = filter_id
+                    table_catalog.save(data)
 
-            if is_forecast:
-                return True
+                    if is_forecast:
+                        return True
 
-            returned_data = {
-                "stop_id": filter_id,
-                "forecast_endpoint": data["properties"]["forecast"],
-            }
+                    returned_data = {
+                        "stop_id": filter_id,
+                        "forecast_endpoint": data["properties"]["forecast"],
+                    }
 
-            return returned_data
+                    return returned_data
+
+            except Exception as e:
+                logger.warning(
+                    "Attempt %d failed for ID %s: %s",
+                    attempt + 1, filter_id, str(e)
+                )
+                if attempt == max_retries:
+                    logger.error("Max retries exceeded for ID: %s", filter_id)
+                    return None
+                # Wait before retry (exponential backoff)
+                await asyncio.sleep(2 ** attempt)
+
+
+async def process_chunk(
+    chunk: List[Dict[str, Any]],
+    session: ClientSession,
+    semaphore: Semaphore,
+) -> List[Union[Dict[str, str], bool, None]]:
+    """Process a chunk of metadata with controlled concurrency."""
+    tasks = [
+        get_endpoint_data(
+            metadata,
+            session,
+            semaphore,
+        )
+        for metadata in chunk
+    ]
+
+    return await asyncio.gather(*tasks, return_exceptions=True)
 
 
 async def extract_nws_api_async(
-    headers: Dict[str, str],
     metadata_list: List[Dict[str, Any]],
     is_forecast: bool = False,
+    chunk_size: int = 50,
+    max_concurrent: int = 5,
+    delay_between_chunks: float = 1.0,
 ) -> Union[bool, List[Dict[str, str]]]:
-    """Asynchronously extract data from NWS API endpoints.
+    """Asynchronously extract data from NWS API endpoints with chunking and rate limiting.
     Args:
-        url (str): Base URL for the NWS API.
-        headers (Dict[str, str]): Headers for the API requests.
         metadata_list (List[Dict[str, Any]]): List of metadata for each API request.
+        is_forecast (bool): Whether this is forecast data extraction.
+        chunk_size (int): Number of requests to process in each chunk.
+        max_concurrent (int): Maximum concurrent requests per chunk.
     Returns:
         Union[bool, List[Dict[str, str]]]: Return success status or list of data.
     """
 
-    semaphore = Semaphore(20)
+    # Reduced concurrency to be respectful to the API
+    semaphore = Semaphore(max_concurrent)
 
-    async with ClientSession() as session:
+    # Session timeout configuration
+    timeout = aiohttp.ClientTimeout(total=60, connect=15, sock_read=30)
 
-        tasks = [
-            get_endpoint_data(
-                metadata,
-                headers,
-                session,
-                semaphore,
+    async with ClientSession(timeout=timeout) as session:
+        all_results = []
+
+        # Process in chunks to avoid overwhelming the API
+        for i in range(0, len(metadata_list), chunk_size):
+            chunk = metadata_list[i:i + chunk_size]
+            logger.info(
+                "Processing chunk %d/%d (%d requests)",
+                i // chunk_size + 1,
+                (len(metadata_list) + chunk_size - 1) // chunk_size,
+                len(chunk)
             )
-            for metadata in metadata_list
-        ]
 
-        results = await asyncio.gather(*tasks)
+            chunk_results = await process_chunk(
+                chunk, session, semaphore
+            )
+
+            # Filter out failed requests and exceptions
+            valid_results = [
+                result for result in chunk_results
+                if result is not None and not isinstance(result, Exception)
+            ]
+
+            all_results.extend(valid_results)
+
+            # Add delay between chunks to be respectful to the API
+            if i + chunk_size < len(metadata_list):
+                await asyncio.sleep(delay_between_chunks)
+
+        logger.info(
+            "Completed processing. Successful requests: %d/%d",
+            len(all_results), len(metadata_list)
+        )
 
         if is_forecast:
-            return all(results)
+            return len(all_results) > 0
 
-        return results
+        return all_results
 
 
 def extract_points_api(
@@ -128,11 +189,6 @@ def extract_points_api(
     target_catalog = params.get("target_catalog")
     endpoint = params.get("endpoint")
     url = params.get("url")
-
-    headers = {
-        "User-Agent": "(NWS_TFM_PROJECT, juandibanezc@outlook.com)",
-        "Accept": "application/json"
-    }
 
     ids_dataset = get_catalog_dataset(base_table)
     last_ts = last_exec.get("last_ts")
@@ -157,10 +213,17 @@ def extract_points_api(
 
     data = dataset_id.get("data")
 
+    data_cleaned = [
+        stop for stop in data
+        if stop["attributes"]["latitude"] is not None and stop["attributes"]["longitude"] is not None
+    ]
+
     points = [
         (stop["id"], stop["attributes"]["latitude"], stop["attributes"]["longitude"])
-        for stop in data
+        for stop in data_cleaned
     ]
+
+    logger.info("Points extracted from dataset. Number of points: %d", len(points))
 
     metadata_list = [
         {
@@ -176,13 +239,24 @@ def extract_points_api(
         } for stop_id, latitude, longitude in points
     ]
 
+    logger.info("Starting asynchronous extraction from NWS API.")
+
+    # Get performance configuration parameters
+    chunk_size = params.get("chunk_size", 50)
+    max_concurrent = params.get("max_concurrent", 5)
+    delay_between_chunks = params.get("delay_between_chunks", 1.0)
+
     results = asyncio.run(
         extract_nws_api_async(
-            headers,
             metadata_list,
             is_forecast=False,
+            chunk_size=chunk_size,
+            max_concurrent=max_concurrent,
+            delay_between_chunks=delay_between_chunks,
         )
     )
+
+    logger.info("Asynchronous extraction completed.")
 
     data = {
         "data": results,
@@ -195,7 +269,6 @@ def extract_points_api(
 def extract_forecast_api(
     points: Dict[str, str],
     params: Dict[str, str],
-    *_: Any,
 ) -> bool:
     """Extract forecast data from NWS API endpoint and save to landing zone.
 
@@ -207,26 +280,38 @@ def extract_forecast_api(
     """
 
     target_catalog = params.get("target_catalog")
-    headers = {
-        "User-Agent": "(NWS_TFM_PROJECT, juandibanezc@outlook.com)",
-        "Accept": "application/json"
-    }
+
+    # To avoid overwhelming the API, we will process only unique forecast endpoints
+    forecast_to_stops = {}
+
+    result = [
+        forecast_to_stops.setdefault(d["forecast_endpoint"], []).append(d["stop_id"])
+        for d in points.get("data")
+    ]
+
+    if not all(result):
+        logger.info(
+            "All points have valid forecast endpoints. Number of unique endpoints: %d",
+            len(forecast_to_stops)
+        )
 
     metadata_list = [
         {
-            "url": point["data"]["forecast_endpoint"],
-            "id": point["data"]["id"],
+            "url": grid,
+            "id": grid.split("/")[-2].replace(",", "_"),
             "timestamp": points["last_ts"],
             "catalog_dataset": target_catalog,
             "is_forecast": True,
-        } for point in points
+        } for grid in forecast_to_stops.keys()
     ]
 
     results = asyncio.run(
         extract_nws_api_async(
-            headers,
             metadata_list,
             is_forecast=True,
+            chunk_size=params.get("chunk_size", 50),
+            max_concurrent=params.get("max_concurrent", 5),
+            delay_between_chunks=params.get("delay_between_chunks", 1.0),
         )
     )
 

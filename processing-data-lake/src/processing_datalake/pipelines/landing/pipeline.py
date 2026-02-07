@@ -6,6 +6,10 @@ from processing_datalake.pipelines.landing.nodes.extract_mbta_api import (
     extract_mbta_endpoint,
     extract_mbta_filter_endpoints,
 )
+from processing_datalake.pipelines.landing.nodes.extract_nws_api import (
+    extract_points_api,
+    extract_forecast_api,
+)
 
 
 def create_pipeline(**kwargs) -> Pipeline:
@@ -50,6 +54,27 @@ def create_pipeline(**kwargs) -> Pipeline:
                 outputs="trips_extraction_true",
                 name="extract_mbta_trips",
                 tags=["landing", "mbta", "filter_endpoint"],
+            ),
+            node(
+                func=extract_points_api,
+                inputs=[
+                    "landing_last_execution@json",
+                    "params:catalog_info_landing_points",
+                    "endpoints_extraction_true",
+                ],
+                outputs="landing_points_list@json",
+                name="extract_nws_points",
+                tags=["landing", "nws", "filter_endpoint"],
+            ),
+            node(
+                func=extract_forecast_api,
+                inputs=[
+                    "landing_points_list@json",
+                    "params:catalog_info_landing_grid_forecast",
+                ],
+                outputs="grids_extraction_true",
+                name="extract_nws_grid_forecast",
+                tags=["landing", "nws", "filter_endpoint"],
             ),
         ]
     )
