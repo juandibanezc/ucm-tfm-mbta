@@ -13,10 +13,16 @@ _landing_template: &landing_dataset
     inferSchema: true
     multiLine: true
 
+# Catalog replace files:
 landing_last_execution@json:
   <<: *landing_ext_dataset
   filepath: "${globals:datalake.config}/last_execution_metadata.json"
 
+landing_points_list@json:
+  <<: *landing_ext_dataset
+  filepath: "${globals:datalake.config}/points_list.json"
+
+# Current landing datasets:
 landing_routes@json:
   <<: *landing_ext_dataset
   filepath: "${globals:datalake.landing_ingest}routes/{year}/{month}/{day}/routes_{last_ts}.json"
@@ -37,6 +43,15 @@ landing_schedules@json:
   <<: *landing_ext_dataset
   filepath: "${globals:datalake.landing_ingest}schedules/{year}/{month}/{day}/schedules_{id}_{last_ts}.json"
 
+landing_points@json:
+  <<: *landing_ext_dataset
+  filepath: "${globals:datalake.landing_ingest}points/{year}/{month}/{day}/points_{id}_{last_ts}.json"
+
+landing_grids@json:
+  <<: *landing_ext_dataset
+  filepath: "${globals:datalake.landing_ingest}grids/{year}/{month}/{day}/grids_{id}_{last_ts}.json"
+
+# Boolean datasets:
 endpoints_extraction_true:
   type: MemoryDataset
   data: true
@@ -58,6 +73,21 @@ trips_extraction_true:
     kedro-viz:
       layer: landing
 
+points_extraction_true:
+  type: MemoryDataset
+  data: true
+  metadata:
+    kedro-viz:
+      layer: landing
+
+grids_extraction_true:
+  type: MemoryDataset
+  data: true
+  metadata:
+    kedro-viz:
+      layer: landing
+
+# Spark datasets:
 landing_routes@spark:
   <<: *landing_dataset
   filepath: "${globals:datalake.landing}routes/{year}/{month}/{day}/routes_{last_ts}.json"
