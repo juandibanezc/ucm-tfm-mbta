@@ -21,7 +21,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 inputs=None,
                 outputs="landing_last_execution@json",
                 name="extract_last_timestamp",
-                tags=["landing", "mbta"],
+                tags=["landing", "mbta", "nws", "mbta_landing"],
             ),
             node(
                 func=extract_mbta_endpoint,
@@ -31,7 +31,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 ],
                 outputs="endpoints_extraction_true",
                 name="extract_mbta_endpoints",
-                tags=["landing", "mbta"],
+                tags=["landing", "mbta", "nws", "mbta_landing"],
             ),
             node(
                 func=extract_mbta_filter_endpoints,
@@ -42,7 +42,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 ],
                 outputs="schedules_extraction_true",
                 name="extract_mbta_schedules",
-                tags=["landing", "mbta", "filter_endpoint"],
+                tags=["landing", "mbta", "filter_endpoint", "mbta_landing"],
             ),
             node(
                 func=extract_mbta_filter_endpoints,
@@ -53,7 +53,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 ],
                 outputs="trips_extraction_true",
                 name="extract_mbta_trips",
-                tags=["landing", "mbta", "filter_endpoint"],
+                tags=["landing", "mbta", "filter_endpoint", "mbta_landing"],
             ),
             node(
                 func=extract_points_api,
@@ -64,7 +64,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 ],
                 outputs="landing_points_list@json",
                 name="extract_nws_points",
-                tags=["landing", "nws", "filter_endpoint"],
+                tags=["landing", "nws", "filter_endpoint", "nws_landing"],
             ),
             node(
                 func=extract_forecast_api,
@@ -74,7 +74,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 ],
                 outputs="grids_extraction_true",
                 name="extract_nws_grid_forecast",
-                tags=["landing", "nws", "filter_endpoint"],
+                tags=["landing", "nws", "filter_endpoint", "nws_landing"],
             ),
         ]
     )
