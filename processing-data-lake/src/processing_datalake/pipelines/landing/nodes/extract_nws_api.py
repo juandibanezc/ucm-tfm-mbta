@@ -54,10 +54,10 @@ async def get_endpoint_data(
         id=filter_id,
     )
 
+    key = "stop_id_mbta"
+
     if is_forecast:
         key = "grid_id"
-
-    key = "stop_id_mbta"
 
     file_path_formatted = PurePosixPath(file_path)
     table_catalog._filepath = file_path_formatted
