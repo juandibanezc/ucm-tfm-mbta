@@ -2,7 +2,7 @@
 
 from kedro.pipeline import Pipeline, node, pipeline
 
-from processing_datalake.pipelines.bronze_first_load.nodes.mbta_ingestion import (
+from processing_datalake.pipelines.bronze_first_load.nodes.ingestion import (
     process_table as ingest_dimensions,
 )
 
@@ -60,6 +60,26 @@ def create_pipeline(**kwargs) -> Pipeline:
                 outputs="bronze_trips@spark",
                 name="trips_bronze_first_load_node",
                 tags=["bronze", "first_load", "mbta"],
+            ),
+            node(
+                func=ingest_dimensions,
+                inputs=[
+                    "params:catalog_info_bronze_points",
+                    "landing_last_execution@json",
+                ],
+                outputs="bronze_points@spark",
+                name="points_bronze_first_load_node",
+                tags=["bronze", "first_load", "nws"],
+            ),
+            node(
+                func=ingest_dimensions,
+                inputs=[
+                    "params:catalog_info_bronze_grids",
+                    "landing_last_execution@json",
+                ],
+                outputs="bronze_grids@spark",
+                name="grids_bronze_first_load_node",
+                tags=["bronze", "first_load", "nws"],
             ),
         ]
     )

@@ -1,7 +1,7 @@
 """Bronze pipeline definition."""
 
 from kedro.pipeline import Pipeline, node, pipeline
-from processing_datalake.pipelines.bronze.nodes.mbta_ingestion import (
+from processing_datalake.pipelines.bronze.nodes.ingestion import (
     ingest_current_load as ingest_dimensions_current_load,
 )
 
