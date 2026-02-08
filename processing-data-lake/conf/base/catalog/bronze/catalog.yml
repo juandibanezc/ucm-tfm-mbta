@@ -1,8 +1,8 @@
 # TEMPLATES
 _bronze_spark_dataset: &spark_dataset
-  type: kedro_datasets.spark.SparkDataset
-  file_format: delta
-  credentials: azure_blob_auth
+  type: processing_datalake.extras.datasets.spark.SparkTableDataset
+  directory: "${globals:datalake.bronze}"
+  table_format: delta
   save_args: &default_save_args
     mode: overwrite
     mergeSchema: true
@@ -11,7 +11,8 @@ _bronze_spark_dataset: &spark_dataset
       layer: bronze
 
 _bronze_delta_dataset: &delta_dataset
-  type: kedro_datasets.spark.DeltaTableDataset
+  type: processing_datalake.extras.datasets.delta.DeltaTableDataset
+  directory: "${globals:datalake.bronze}"
   metadata:
     kedro-viz:
       layer: bronze
@@ -19,13 +20,13 @@ _bronze_delta_dataset: &delta_dataset
 # DATASETS
 bronze_routes@spark:
   <<: *spark_dataset
-  filepath: "${globals:datalake.bronze}routes"
+  table: routes_raw
   save_args:
     <<: *default_save_args
 
 bronze_routes@delta:
   <<: *delta_dataset
-  filepath: "${globals:datalake.bronze}routes"
+  table: routes_raw
 
 bronze_routes_true:
   type: MemoryDataset
@@ -36,13 +37,13 @@ bronze_routes_true:
 
 bronze_route_patterns@spark:
   <<: *spark_dataset
-  filepath: "${globals:datalake.bronze}route_patterns"
+  table: route_patterns_raw
   save_args:
     <<: *default_save_args
 
 bronze_route_patterns@delta:
   <<: *delta_dataset
-  filepath: "${globals:datalake.bronze}route_patterns"
+  table: route_patterns_raw
 
 bronze_route_patterns_true:
   type: MemoryDataset
@@ -53,13 +54,13 @@ bronze_route_patterns_true:
 
 bronze_stops@spark:
   <<: *spark_dataset
-  filepath: "${globals:datalake.bronze}stops"
+  table: stops_raw
   save_args:
     <<: *default_save_args
 
 bronze_stops@delta:
   <<: *delta_dataset
-  filepath: "${globals:datalake.bronze}stops"
+  table: stops_raw
 
 bronze_stops_true:
   type: MemoryDataset
@@ -70,13 +71,13 @@ bronze_stops_true:
 
 bronze_trips@spark:
   <<: *spark_dataset
-  filepath: "${globals:datalake.bronze}trips"
+  table: trips_raw
   save_args:
     <<: *default_save_args
 
 bronze_trips@delta:
   <<: *delta_dataset
-  filepath: "${globals:datalake.bronze}trips"
+  table: trips_raw
 
 bronze_trips_true:
   type: MemoryDataset
@@ -87,13 +88,13 @@ bronze_trips_true:
 
 bronze_schedules@spark:
   <<: *spark_dataset
-  filepath: "${globals:datalake.bronze}schedules"
+  table: schedules_raw
   save_args:
     <<: *default_save_args
 
 bronze_schedules@delta:
   <<: *delta_dataset
-  filepath: "${globals:datalake.bronze}schedules"
+  table: schedules_raw
 
 bronze_schedules_true:
   type: MemoryDataset
