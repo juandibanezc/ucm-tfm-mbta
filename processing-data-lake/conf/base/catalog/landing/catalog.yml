@@ -6,9 +6,9 @@ _landing_extraction: &landing_ext_dataset
     indent: 2
 
 _landing_template: &landing_dataset
-  type: kedro_datasets.spark.SparkDataset
-  credentials: azure_blob_auth
-  file_format: json
+  type: processing_datalake.extras.datasets.spark.SparkTableDataset
+  directory: "${globals:datalake.landing}"
+  table_format: json
   load_args: &default_load_args
     inferSchema: true
     multiLine: true
@@ -54,43 +54,43 @@ landing_grids@json:
 # Spark datasets:
 landing_routes@spark:
   <<: *landing_dataset
-  filepath: "${globals:datalake.landing}routes/{year}/{month}/{day}/routes_{last_ts}.json"
+  table: routes/{year}/{month}/{day}/routes_{last_ts}.json
   load_args:
     <<: *default_load_args
 
 landing_route_patterns@spark:
   <<: *landing_dataset
-  filepath: "${globals:datalake.landing}route_patterns/{year}/{month}/{day}/route_patterns_{last_ts}.json"
+  table: route_patterns/{year}/{month}/{day}/route_patterns_{last_ts}.json
   load_args:
     <<: *default_load_args
 
 landing_stops@spark:
   <<: *landing_dataset
-  filepath: "${globals:datalake.landing}stops/{year}/{month}/{day}/stops_{last_ts}.json"
+  table: stops/{year}/{month}/{day}/stops_{last_ts}.json
   load_args:
     <<: *default_load_args
 
 landing_trips@spark:
   <<: *landing_dataset
-  filepath: "${globals:datalake.landing}trips/{year}/{month}/{day}/trips_*_{last_ts}.json"
+  table: trips/{year}/{month}/{day}/trips_*_{last_ts}.json
   load_args:
     <<: *default_load_args
 
 landing_schedules@spark:
   <<: *landing_dataset
-  filepath: "${globals:datalake.landing}schedules/{year}/{month}/{day}/schedules_*_{last_ts}.json"
+  table: schedules/{year}/{month}/{day}/schedules_*_{last_ts}.json
   load_args:
     <<: *default_load_args
 
 landing_points@spark:
   <<: *landing_dataset
-  filepath: "${globals:datalake.landing}points/{year}/{month}/{day}/points_*_{last_ts}.json"
+  table: points/{year}/{month}/{day}/points_*_{last_ts}.json
   load_args:
     <<: *default_load_args
 
 landing_grids@spark:
   <<: *landing_dataset
-  filepath: "${globals:datalake.landing}grids/{year}/{month}/{day}/grids_*_{last_ts}.json"
+  table: grids/{year}/{month}/{day}/grids_*_{last_ts}.json
   load_args:
     <<: *default_load_args
 

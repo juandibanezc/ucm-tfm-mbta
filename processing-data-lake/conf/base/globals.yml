@@ -2,6 +2,6 @@ datalake:
   config: abfss://config/
   landing_ingest: abfs://landing/
   landing: abfs://landing@tfmmbtasta.dfs.core.windows.net/
-  bronze: tfmmbtaadbpr.bronze.
-  silver: tfmmbtaadbpr.silver.
-  gold: tfmmbtaadbpr.gold.
+  bronze: tfmmbtaadbpr.bronze
+  silver: tfmmbtaadbpr.silver
+  gold: tfmmbtaadbpr.gold
