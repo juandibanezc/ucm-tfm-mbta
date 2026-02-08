@@ -65,5 +65,27 @@ def create_pipeline(**kwargs) -> Pipeline:
                 name="trips_bronze",
                 tags=["bronze", "mbta"],
             ),
+            node(
+                func=ingest_dimensions_current_load,
+                inputs=[
+                    "params:catalog_info_bronze_points",
+                    "landing_last_execution@json",
+                    "bronze_points@delta",
+                ],
+                outputs="bronze_points_true",
+                name="points_bronze",
+                tags=["bronze", "nws"],
+            ),
+            node(
+                func=ingest_dimensions_current_load,
+                inputs=[
+                    "params:catalog_info_bronze_grids",
+                    "landing_last_execution@json",
+                    "bronze_grids@delta",
+                ],
+                outputs="bronze_grids_true",
+                name="grids_bronze",
+                tags=["bronze", "nws"],
+            ),
         ]
     )
