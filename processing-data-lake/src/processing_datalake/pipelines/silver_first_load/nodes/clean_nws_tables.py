@@ -20,12 +20,12 @@ def transform_grids_table(
     table_df = source.select(
         F.col("grid_id"),
         F.col("elevation.unitCode").alias("elevation_unit"),
-        F.col("elevation.value").alias("elevation_value"),
+        F.col("elevation.value").cast("double").alias("elevation_value"),
         F.col("forecast_generator"),
-        F.col("generated_at"),
-        F.explode_outer(F.col("periods")).alias("period_forecast"),
+        F.col("generated_at").cast("timestamp").alias("generated_at"),
+        F.col("periods").alias("period_forecast"),
         F.col("units"),
-        F.col("update_time"),
+        F.col("update_time").cast("timestamp").alias("update_time"),
     )
 
     return table_df

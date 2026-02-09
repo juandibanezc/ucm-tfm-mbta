@@ -43,3 +43,11 @@ catalog_info_silver_routes:
   route_table: true
   schema:
     agency_id: integer
+
+catalog_info_silver_grids:
+  key:
+    - grid_id
+
+catalog_info_silver_points:
+  key:
+    - stop_id
