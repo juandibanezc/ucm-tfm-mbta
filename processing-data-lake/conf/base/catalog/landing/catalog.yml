@@ -6,17 +6,23 @@ _landing_extraction: &landing_ext_dataset
     indent: 2
 
 _landing_template: &landing_dataset
-  type: kedro_datasets.spark.SparkDataset
-  credentials: azure_blob_auth
-  file_format: json
+  type: processing_datalake.extras.datasets.spark.SparkTableDataset
+  directory: "${globals:datalake.landing}"
+  table_format: json
   load_args: &default_load_args
     inferSchema: true
     multiLine: true
 
+# Catalog replace files:
 landing_last_execution@json:
   <<: *landing_ext_dataset
-  filepath: "${globals:datalake.landing}config/last_execution_metadata.json"
+  filepath: "${globals:datalake.config}/last_execution_metadata.json"
 
+landing_points_list@json:
+  <<: *landing_ext_dataset
+  filepath: "${globals:datalake.config}/points_list.json"
+
+# Current landing datasets:
 landing_routes@json:
   <<: *landing_ext_dataset
   filepath: "${globals:datalake.landing_ingest}routes/{year}/{month}/{day}/routes_{last_ts}.json"
@@ -37,6 +43,58 @@ landing_schedules@json:
   <<: *landing_ext_dataset
   filepath: "${globals:datalake.landing_ingest}schedules/{year}/{month}/{day}/schedules_{id}_{last_ts}.json"
 
+landing_points@json:
+  <<: *landing_ext_dataset
+  filepath: "${globals:datalake.landing_ingest}points/{year}/{month}/{day}/points_{id}_{last_ts}.json"
+
+landing_grids@json:
+  <<: *landing_ext_dataset
+  filepath: "${globals:datalake.landing_ingest}grids/{year}/{month}/{day}/grids_{id}_{last_ts}.json"
+
+# Spark datasets:
+landing_routes@spark:
+  <<: *landing_dataset
+  table: routes/{year}/{month}/{day}/routes_{last_ts}.json
+  load_args:
+    <<: *default_load_args
+
+landing_route_patterns@spark:
+  <<: *landing_dataset
+  table: route_patterns/{year}/{month}/{day}/route_patterns_{last_ts}.json
+  load_args:
+    <<: *default_load_args
+
+landing_stops@spark:
+  <<: *landing_dataset
+  table: stops/{year}/{month}/{day}/stops_{last_ts}.json
+  load_args:
+    <<: *default_load_args
+
+landing_trips@spark:
+  <<: *landing_dataset
+  table: trips/{year}/{month}/{day}/trips_*_{last_ts}.json
+  load_args:
+    <<: *default_load_args
+
+landing_schedules@spark:
+  <<: *landing_dataset
+  table: schedules/{year}/{month}/{day}/schedules_*_{last_ts}.json
+  load_args:
+    <<: *default_load_args
+
+landing_points@spark:
+  <<: *landing_dataset
+  table: points/{year}/{month}/{day}/points_*_{last_ts}.json
+  load_args:
+    <<: *default_load_args
+
+landing_grids@spark:
+  <<: *landing_dataset
+  table: grids/{year}/{month}/{day}/grids_*_{last_ts}.json
+  load_args:
+    <<: *default_load_args
+
+# Boolean datasets:
 endpoints_extraction_true:
   type: MemoryDataset
   data: true
@@ -58,32 +116,16 @@ trips_extraction_true:
     kedro-viz:
       layer: landing
 
-landing_routes@spark:
-  <<: *landing_dataset
-  filepath: "${globals:datalake.landing}routes/{year}/{month}/{day}/routes_{last_ts}.json"
-  load_args:
-    <<: *default_load_args
+points_extraction_true:
+  type: MemoryDataset
+  data: true
+  metadata:
+    kedro-viz:
+      layer: landing
 
-landing_route_patterns@spark:
-  <<: *landing_dataset
-  filepath: "${globals:datalake.landing}route_patterns/{year}/{month}/{day}/route_patterns_{last_ts}.json"
-  load_args:
-    <<: *default_load_args
-
-landing_stops@spark:
-  <<: *landing_dataset
-  filepath: "${globals:datalake.landing}stops/{year}/{month}/{day}/stops_{last_ts}.json"
-  load_args:
-    <<: *default_load_args
-
-landing_trips@spark:
-  <<: *landing_dataset
-  filepath: "${globals:datalake.landing}trips/{year}/{month}/{day}/trips_*_{last_ts}.json"
-  load_args:
-    <<: *default_load_args
-
-landing_schedules@spark:
-  <<: *landing_dataset
-  filepath: "${globals:datalake.landing}schedules/{year}/{month}/{day}/schedules_*_{last_ts}.json"
-  load_args:
-    <<: *default_load_args
+grids_extraction_true:
+  type: MemoryDataset
+  data: true
+  metadata:
+    kedro-viz:
+      layer: landing

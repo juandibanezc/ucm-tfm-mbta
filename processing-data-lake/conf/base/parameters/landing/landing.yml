@@ -24,3 +24,20 @@ catalog_info_landing_trips:
   endpoint: trips
   target_catalog: landing_trips@json
   credentials_name: mbta_api_auth
+
+catalog_info_landing_points:
+  url: https://api.weather.gov/{endpoint}/{latitude},{longitude}
+  endpoint: points
+  base_table: landing_stops@json
+  target_catalog: landing_points@json
+  chunk_size: 50          # Process requests in chunks of 50
+  max_concurrent: 5       # Max 5 concurrent requests per chunk  
+  max_retries: 3          # Retry failed requests up to 3 times
+  delay_between_chunks: 1 # Wait 1 second between chunks
+
+catalog_info_landing_grid_forecast:
+  target_catalog: landing_grids@json
+  chunk_size: 30          # Process requests in chunks of 50
+  max_concurrent: 5       # Max 5 concurrent requests per chunk  
+  max_retries: 3          # Retry failed requests up to 3 times
+  delay_between_chunks: 1 # Wait 1 second between chunks

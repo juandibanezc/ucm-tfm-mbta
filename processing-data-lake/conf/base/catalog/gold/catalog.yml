@@ -1,8 +1,8 @@
 # TEMPLATES
 _gold_spark_dataset: &spark_dataset
-  type: kedro_datasets.spark.SparkDataset
-  file_format: delta
-  credentials: azure_blob_auth
+  type: processing_datalake.extras.datasets.spark.SparkTableDataset
+  directory: "${globals:datalake.gold}"
+  table_format: delta
   save_args: &default_save_args
     mode: overwrite
     mergeSchema: true
@@ -11,7 +11,8 @@ _gold_spark_dataset: &spark_dataset
       layer: gold
 
 _gold_delta_dataset: &delta_dataset
-  type: kedro_datasets.spark.DeltaTableDataset
+  type: processing_datalake.extras.datasets.delta.DeltaTableDataset
+  directory: "${globals:datalake.gold}"
   metadata:
     kedro-viz:
       layer: gold
@@ -19,17 +20,17 @@ _gold_delta_dataset: &delta_dataset
 # DATASETS
 gold_trips_metrics@spark:
   <<: *spark_dataset
-  filepath: "${globals:datalake.gold}trips_metrics"
+  table: trips_metrics
   save_args:
     <<: *default_save_args
 
 gold_trips_metrics@delta:
   <<: *delta_dataset
-  filepath: "${globals:datalake.gold}trips_metrics"
+  table: trips_metrics
 
 gold_trips_metrics_true:
   type: MemoryDataset
   data: true
   metadata:
     kedro-viz:
-      layer: silver
+      layer: gold

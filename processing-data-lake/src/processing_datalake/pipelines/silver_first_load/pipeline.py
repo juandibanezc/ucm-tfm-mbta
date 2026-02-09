@@ -5,6 +5,10 @@ from kedro.pipeline import Pipeline, node, pipeline
 from processing_datalake.pipelines.silver_first_load.nodes.clean_mbta_tables import (
     clean_tables as cleaning_mbta_tables,
 )
+from processing_datalake.pipelines.silver_first_load.nodes.clean_nws_tables import (
+    clean_grids_table,
+    clean_points_table,
+)
 
 
 def create_pipeline(**kwargs) -> Pipeline:
@@ -19,7 +23,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 ],
                 outputs="silver_schedules@spark",
                 name="silver_schedules_first_load",
-                tags=["silver", "first_load", "mbta"],
+                tags=["silver", "first_load", "mbta_first_load"],
             ),
             node(
                 func=cleaning_mbta_tables,
@@ -29,7 +33,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 ],
                 outputs="silver_trips@spark",
                 name="silver_trips_first_load",
-                tags=["silver", "first_load", "mbta"],
+                tags=["silver", "first_load", "mbta_first_load"],
             ),
             node(
                 func=cleaning_mbta_tables,
@@ -39,7 +43,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 ],
                 outputs="silver_stops@spark",
                 name="silver_stops_first_load",
-                tags=["silver", "first_load", "mbta"],
+                tags=["silver", "first_load", "mbta_first_load"],
             ),
             node(
                 func=cleaning_mbta_tables,
@@ -49,7 +53,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 ],
                 outputs="silver_route_patterns@spark",
                 name="silver_route_patterns_first_load",
-                tags=["silver", "first_load", "mbta"],
+                tags=["silver", "first_load", "mbta_first_load"],
             ),
             node(
                 func=cleaning_mbta_tables,
@@ -59,7 +63,25 @@ def create_pipeline(**kwargs) -> Pipeline:
                 ],
                 outputs="silver_routes@spark",
                 name="silver_routes_first_load",
-                tags=["silver", "first_load", "mbta"],
+                tags=["silver", "first_load", "mbta_first_load"],
+            ),
+            node(
+                func=clean_grids_table,
+                inputs=[
+                    "bronze_grids@spark",
+                ],
+                outputs="silver_grids@spark",
+                name="silver_grids_first_load",
+                tags=["silver", "first_load", "nws_first_load"],
+            ),
+            node(
+                func=clean_points_table,
+                inputs=[
+                    "bronze_points@spark",
+                ],
+                outputs="silver_points@spark",
+                name="silver_points_first_load",
+                tags=["silver", "first_load", "nws_first_load"],
             ),
         ]
     )

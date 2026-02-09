@@ -84,3 +84,29 @@ catalog_info_bronze_schedules:
     - data.relationships.route.data.id as route_id
     - data.relationships.stop.data.id as stop_id
     - data.relationships.trip.data.id as trip_id
+
+catalog_info_bronze_points:
+  keys:
+    - stop_id_mbta
+  explode_column: false
+  catalog_dataset: landing_points@spark
+  columns:
+    - stop_id_mbta as stop_id
+    - properties.gridId as grid_box
+    - properties.gridX as grid_x
+    - properties.gridY as grid_y
+
+catalog_info_bronze_grids:
+  keys:
+    - grid_id
+  explode_column: false
+  catalog_dataset: landing_grids@spark
+  columns:
+    - grid_id
+    - properties.elevation as elevation
+    - properties.forecastGenerator as forecast_generator
+    - properties.generatedAt as generated_at
+    - properties.periods as periods
+    - properties.units as units
+    - properties.updateTime as update_time
+    - properties.validTimes as valid_times

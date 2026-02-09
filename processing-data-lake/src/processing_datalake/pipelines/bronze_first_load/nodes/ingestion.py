@@ -22,6 +22,7 @@ def single_table_processing(
     month = last_update_ts_formatted[4:6]
     day = last_update_ts_formatted[6:8]
     catalog_table = params.get("catalog_dataset")
+    explode_column = params.get("explode_column", True)
 
     table_catalog = get_dataset(catalog_table)
     file_path = str(table_catalog._filepath).format(
@@ -36,8 +37,8 @@ def single_table_processing(
     table: DataFrame = table_catalog.load()
 
     columns = params.get("columns")
-
-    table = table.withColumn("data", F.explode(F.col("data")))
+    if explode_column:
+        table = table.withColumn("data", F.explode(F.col("data")))
 
     source = table.selectExpr(*columns)
 
@@ -60,8 +61,10 @@ def process_table(
 
     source = add_filename_column(table_ingest)
 
+    last_ts = last_update_ts.get("last_ts")
+
     source = audit_cols(source, scd_key=True)
 
-    source = source.filter(F.col("source_file").contains(last_update_ts))
+    source = source.filter(F.col("source_file").contains(last_ts))
 
     return source

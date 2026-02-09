@@ -6,6 +6,10 @@ from processing_datalake.pipelines.landing.nodes.extract_mbta_api import (
     extract_mbta_endpoint,
     extract_mbta_filter_endpoints,
 )
+from processing_datalake.pipelines.landing.nodes.extract_nws_api import (
+    extract_points_api,
+    extract_forecast_api,
+)
 
 
 def create_pipeline(**kwargs) -> Pipeline:
@@ -17,7 +21,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 inputs=None,
                 outputs="landing_last_execution@json",
                 name="extract_last_timestamp",
-                tags=["landing", "mbta"],
+                tags=["landing", "mbta", "nws", "mbta_landing"],
             ),
             node(
                 func=extract_mbta_endpoint,
@@ -27,27 +31,50 @@ def create_pipeline(**kwargs) -> Pipeline:
                 ],
                 outputs="endpoints_extraction_true",
                 name="extract_mbta_endpoints",
-                tags=["landing", "mbta"],
+                tags=["landing", "mbta", "nws", "mbta_landing"],
             ),
             node(
                 func=extract_mbta_filter_endpoints,
                 inputs=[
                     "params:catalog_info_landing_schedules",
                     "landing_last_execution@json",
+                    "endpoints_extraction_true",
                 ],
                 outputs="schedules_extraction_true",
                 name="extract_mbta_schedules",
-                tags=["landing", "mbta", "filter_endpoint"],
+                tags=["landing", "mbta", "filter_endpoint", "mbta_landing"],
             ),
             node(
                 func=extract_mbta_filter_endpoints,
                 inputs=[
                     "params:catalog_info_landing_trips",
                     "landing_last_execution@json",
+                    "endpoints_extraction_true",
                 ],
                 outputs="trips_extraction_true",
                 name="extract_mbta_trips",
-                tags=["landing", "mbta", "filter_endpoint"],
+                tags=["landing", "mbta", "filter_endpoint", "mbta_landing"],
+            ),
+            node(
+                func=extract_points_api,
+                inputs=[
+                    "landing_last_execution@json",
+                    "params:catalog_info_landing_points",
+                    "endpoints_extraction_true",
+                ],
+                outputs="landing_points_list@json",
+                name="extract_nws_points",
+                tags=["landing", "nws", "filter_endpoint", "nws_landing"],
+            ),
+            node(
+                func=extract_forecast_api,
+                inputs=[
+                    "landing_points_list@json",
+                    "params:catalog_info_landing_grid_forecast",
+                ],
+                outputs="grids_extraction_true",
+                name="extract_nws_grid_forecast",
+                tags=["landing", "nws", "filter_endpoint", "nws_landing"],
             ),
         ]
     )

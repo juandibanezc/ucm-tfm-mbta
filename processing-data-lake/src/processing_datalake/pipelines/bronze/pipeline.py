@@ -1,7 +1,7 @@
 """Bronze pipeline definition."""
 
 from kedro.pipeline import Pipeline, node, pipeline
-from processing_datalake.pipelines.bronze.nodes.mbta_ingestion import (
+from processing_datalake.pipelines.bronze.nodes.ingestion import (
     ingest_current_load as ingest_dimensions_current_load,
 )
 
@@ -64,6 +64,28 @@ def create_pipeline(**kwargs) -> Pipeline:
                 outputs="bronze_trips_true",
                 name="trips_bronze",
                 tags=["bronze", "mbta"],
+            ),
+            node(
+                func=ingest_dimensions_current_load,
+                inputs=[
+                    "params:catalog_info_bronze_points",
+                    "landing_last_execution@json",
+                    "bronze_points@delta",
+                ],
+                outputs="bronze_points_true",
+                name="points_bronze",
+                tags=["bronze", "nws"],
+            ),
+            node(
+                func=ingest_dimensions_current_load,
+                inputs=[
+                    "params:catalog_info_bronze_grids",
+                    "landing_last_execution@json",
+                    "bronze_grids@delta",
+                ],
+                outputs="bronze_grids_true",
+                name="grids_bronze",
+                tags=["bronze", "nws"],
             ),
         ]
     )

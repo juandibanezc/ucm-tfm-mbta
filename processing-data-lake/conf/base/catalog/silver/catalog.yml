@@ -1,8 +1,8 @@
 # TEMPLATES
 _silver_spark_dataset: &spark_dataset
-  type: kedro_datasets.spark.SparkDataset
-  file_format: delta
-  credentials: azure_blob_auth
+  type: processing_datalake.extras.datasets.spark.SparkTableDataset
+  directory: "${globals:datalake.silver}"
+  table_format: delta
   save_args: &default_save_args
     mode: overwrite
     mergeSchema: true
@@ -11,7 +11,8 @@ _silver_spark_dataset: &spark_dataset
       layer: silver
 
 _silver_delta_dataset: &delta_dataset
-  type: kedro_datasets.spark.DeltaTableDataset
+  type: processing_datalake.extras.datasets.delta.DeltaTableDataset
+  directory: "${globals:datalake.silver}"
   metadata:
     kedro-viz:
       layer: silver
@@ -19,13 +20,13 @@ _silver_delta_dataset: &delta_dataset
 # DATASETS
 silver_routes@spark:
   <<: *spark_dataset
-  filepath: "${globals:datalake.silver}routes"
+  table: routes_cleaned
   save_args:
     <<: *default_save_args
 
 silver_routes@delta:
   <<: *delta_dataset
-  filepath: "${globals:datalake.silver}routes"
+  table: routes_cleaned
 
 silver_routes_true:
   type: MemoryDataset
@@ -36,13 +37,13 @@ silver_routes_true:
 
 silver_route_patterns@spark:
   <<: *spark_dataset
-  filepath: "${globals:datalake.silver}route_patterns"
+  table: route_patterns_cleaned
   save_args:
     <<: *default_save_args
 
 silver_route_patterns@delta:
   <<: *delta_dataset
-  filepath: "${globals:datalake.silver}route_patterns"
+  table: route_patterns_cleaned
 
 silver_route_patterns_true:
   type: MemoryDataset
@@ -53,13 +54,13 @@ silver_route_patterns_true:
 
 silver_stops@spark:
   <<: *spark_dataset
-  filepath: "${globals:datalake.silver}stops"
+  table: stops_cleaned
   save_args:
     <<: *default_save_args
 
 silver_stops@delta:
   <<: *delta_dataset
-  filepath: "${globals:datalake.silver}stops"
+  table: stops_cleaned
 
 silver_stops_true:
   type: MemoryDataset
@@ -70,13 +71,13 @@ silver_stops_true:
 
 silver_trips@spark:
   <<: *spark_dataset
-  filepath: "${globals:datalake.silver}trips"
+  table: trips_cleaned
   save_args:
     <<: *default_save_args
 
 silver_trips@delta:
   <<: *delta_dataset
-  filepath: "${globals:datalake.silver}trips"
+  table: trips_cleaned
 
 silver_trips_true:
   type: MemoryDataset
@@ -87,15 +88,49 @@ silver_trips_true:
 
 silver_schedules@spark:
   <<: *spark_dataset
-  filepath: "${globals:datalake.silver}schedules"
+  table: schedules_cleaned
   save_args:
     <<: *default_save_args
 
 silver_schedules@delta:
   <<: *delta_dataset
-  filepath: "${globals:datalake.silver}schedules"
+  table: schedules_cleaned
 
 silver_schedules_true:
+  type: MemoryDataset
+  data: true
+  metadata:
+    kedro-viz:
+      layer: silver
+
+silver_points@spark:
+  <<: *spark_dataset
+  table: points_cleaned
+  save_args:
+    <<: *default_save_args
+
+silver_points@delta:
+  <<: *delta_dataset
+  table: points_cleaned
+
+silver_points_true:
+  type: MemoryDataset
+  data: true
+  metadata:
+    kedro-viz:
+      layer: silver
+
+silver_grids@spark:
+  <<: *spark_dataset
+  table: grids_cleaned
+  save_args:
+    <<: *default_save_args
+
+silver_grids@delta:
+  <<: *delta_dataset
+  table: grids_cleaned
+
+silver_grids_true:
   type: MemoryDataset
   data: true
   metadata:
