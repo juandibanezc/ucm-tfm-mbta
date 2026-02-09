@@ -6,6 +6,11 @@ from pathlib import PurePosixPath
 
 import asyncio
 from asyncio import Semaphore
+try:
+    import nest_asyncio
+    nest_asyncio.apply()
+except ImportError:
+    pass
 
 import aiohttp
 from aiohttp import ClientSession
@@ -251,15 +256,33 @@ def extract_points_api(
     max_concurrent = params.get("max_concurrent", 5)
     delay_between_chunks = params.get("delay_between_chunks", 1.0)
 
-    results = asyncio.run(
-        extract_nws_api_async(
-            metadata_list,
-            is_forecast=False,
-            chunk_size=chunk_size,
-            max_concurrent=max_concurrent,
-            delay_between_chunks=delay_between_chunks,
+    # Handle existing event loop in environments like Databricks
+    try:
+        loop = asyncio.get_running_loop()  # noqa: F841
+        # If there's already a running loop, create a task
+        import concurrent.futures
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            results = executor.submit(
+                asyncio.run,
+                extract_nws_api_async(
+                    metadata_list,
+                    is_forecast=False,
+                    chunk_size=chunk_size,
+                    max_concurrent=max_concurrent,
+                    delay_between_chunks=delay_between_chunks,
+                )
+            ).result()
+    except RuntimeError:
+        # No running loop, safe to use asyncio.run()
+        results = asyncio.run(
+            extract_nws_api_async(
+                metadata_list,
+                is_forecast=False,
+                chunk_size=chunk_size,
+                max_concurrent=max_concurrent,
+                delay_between_chunks=delay_between_chunks,
+            )
         )
-    )
 
     logger.info("Asynchronous extraction completed.")
 
@@ -310,14 +333,32 @@ def extract_forecast_api(
         } for grid in forecast_to_stops.keys()
     ]
 
-    results = asyncio.run(
-        extract_nws_api_async(
-            metadata_list,
-            is_forecast=True,
-            chunk_size=params.get("chunk_size", 50),
-            max_concurrent=params.get("max_concurrent", 5),
-            delay_between_chunks=params.get("delay_between_chunks", 1.0),
+    # Handle existing event loop in environments like Databricks
+    try:
+        loop = asyncio.get_running_loop()  # noqa: F841
+        # If there's already a running loop, create a task
+        import concurrent.futures
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            results = executor.submit(
+                asyncio.run,
+                extract_nws_api_async(
+                    metadata_list,
+                    is_forecast=True,
+                    chunk_size=params.get("chunk_size", 50),
+                    max_concurrent=params.get("max_concurrent", 5),
+                    delay_between_chunks=params.get("delay_between_chunks", 1.0),
+                )
+            ).result()
+    except RuntimeError:
+        # No running loop, safe to use asyncio.run()
+        results = asyncio.run(
+            extract_nws_api_async(
+                metadata_list,
+                is_forecast=True,
+                chunk_size=params.get("chunk_size", 50),
+                max_concurrent=params.get("max_concurrent", 5),
+                delay_between_chunks=params.get("delay_between_chunks", 1.0),
+            )
         )
-    )
 
     return results

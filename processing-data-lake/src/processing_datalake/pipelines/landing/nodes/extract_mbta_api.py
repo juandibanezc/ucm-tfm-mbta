@@ -8,6 +8,11 @@ from pathlib import PurePosixPath
 
 import asyncio
 from asyncio import Semaphore
+try:
+    import nest_asyncio
+    nest_asyncio.apply()
+except ImportError:
+    pass
 from aiohttp import ClientSession
 
 from processing_datalake.hooks import (
@@ -234,10 +239,22 @@ def extract_mbta_filter_endpoints(
 
     logger.info("Starting asynchronous extraction from MBTA API.")
 
-    result = asyncio.run(extract_mbta_endpoint_async(
-        headers,
-        metadata_list,
-    ))
+    # Handle existing event loop in environments like Databricks
+    try:
+        loop = asyncio.get_running_loop()  # noqa: F841
+        # If there's already a running loop, create a task
+        import concurrent.futures
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            result = executor.submit(
+                asyncio.run,
+                extract_mbta_endpoint_async(headers, metadata_list)
+            ).result()
+    except RuntimeError:
+        # No running loop, safe to use asyncio.run()
+        result = asyncio.run(extract_mbta_endpoint_async(
+            headers,
+            metadata_list,
+        ))
 
     logger.info("Asynchronous extraction completed.")
 

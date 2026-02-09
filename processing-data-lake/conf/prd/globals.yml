@@ -1,7 +1,0 @@
-datalake:
-  config: abfss://config/
-  landing_ingest: abfss://landing/
-  landing: abfss://landing@tfmmbtasta.dfs.core.windows.net/
-  bronze: tfmlakehouse.bronze
-  silver: tfmlakehouse.silver
-  gold: tfmlakehouse.gold
