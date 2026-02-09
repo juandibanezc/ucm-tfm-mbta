@@ -5,6 +5,9 @@ from kedro.pipeline import Pipeline, node, pipeline
 from processing_datalake.pipelines.silver.nodes.clean_mbta import (
     clean_current_load as clean_current_load_mbta,
 )
+from processing_datalake.pipelines.silver.nodes.clean_nws import (
+    clean_current_load as clean_current_load_nws,
+)
 
 
 def create_pipeline(**kwargs) -> Pipeline:
@@ -21,7 +24,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 ],
                 outputs="silver_schedules_true",
                 name="silver_schedules_load",
-                tags=["silver", "first_load", "mbta"],
+                tags=["silver", "mbta"],
             ),
             node(
                 func=clean_current_load_mbta,
@@ -33,7 +36,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 ],
                 outputs="silver_trips_true",
                 name="silver_trips_load",
-                tags=["silver", "first_load", "mbta"],
+                tags=["silver", "mbta"],
             ),
             node(
                 func=clean_current_load_mbta,
@@ -45,7 +48,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 ],
                 outputs="silver_stops_true",
                 name="silver_stops_load",
-                tags=["silver", "first_load", "mbta"],
+                tags=["silver", "mbta"],
             ),
             node(
                 func=clean_current_load_mbta,
@@ -57,7 +60,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 ],
                 outputs="silver_route_patterns_true",
                 name="silver_route_patterns_load",
-                tags=["silver", "first_load", "mbta"],
+                tags=["silver", "mbta"],
             ),
             node(
                 func=clean_current_load_mbta,
@@ -69,7 +72,31 @@ def create_pipeline(**kwargs) -> Pipeline:
                 ],
                 outputs="silver_routes_true",
                 name="silver_routes_load",
-                tags=["silver", "first_load", "mbta"],
+                tags=["silver", "mbta"],
+            ),
+            node(
+                func=clean_current_load_nws,
+                inputs=[
+                    "bronze_grids@spark",
+                    "params:catalog_info_silver_grids",
+                    "landing_last_execution@json",
+                    "silver_grids@delta",
+                ],
+                outputs="silver_grids_true",
+                name="silver_grids_load",
+                tags=["silver", "nws"],
+            ),
+            node(
+                func=clean_current_load_nws,
+                inputs=[
+                    "bronze_points@spark",
+                    "params:catalog_info_silver_points",
+                    "landing_last_execution@json",
+                    "silver_points@delta",
+                ],
+                outputs="silver_points_true",
+                name="silver_points_load",
+                tags=["silver", "nws"],
             ),
         ]
     )

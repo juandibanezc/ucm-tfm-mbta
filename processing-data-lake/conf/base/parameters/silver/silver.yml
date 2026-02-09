@@ -45,9 +45,10 @@ catalog_info_silver_routes:
     agency_id: integer
 
 catalog_info_silver_grids:
-  key:
+  grids: true
+  keys:
     - grid_id
 
 catalog_info_silver_points:
-  key:
+  keys:
     - stop_id

@@ -67,7 +67,7 @@ def clean_grids_table(
 
     table_df = transform_grids_table(table)
 
-    return audit_cols(table_df)
+    return audit_cols(table_df, scd_key=True)
 
 
 def clean_points_table(
@@ -84,4 +84,4 @@ def clean_points_table(
 
     table_df = transform_point_table(table)
 
-    return audit_cols(table_df)
+    return audit_cols(table_df, scd_key=True)
