@@ -17,6 +17,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                     "silver_routes@spark",
                     "silver_trips@spark",
                     "silver_route_patterns@spark",
+                    "landing_last_execution@json",
                     "params:catalog_info_trips_metrics",
                 ],
                 outputs="gold_trips_metrics_true",

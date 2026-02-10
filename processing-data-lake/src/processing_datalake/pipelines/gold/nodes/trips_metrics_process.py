@@ -17,6 +17,7 @@ def process_trips_metrics(
     silver_routes: DataFrame,
     silver_trips: DataFrame,
     silver_route_patterns: DataFrame,
+    last_timestamp: Dict[str, Any],
     params: Dict[str, Any],
 ) -> bool:
     """Process trips metrics data and write to gold delta table."""
@@ -29,7 +30,7 @@ def process_trips_metrics(
         silver_route_patterns,
     )
 
-    last_update_ts = params.get("last_ts")
+    last_update_ts = last_timestamp.get("last_ts")
     last_update_ts_formatted = str(last_update_ts)
     year = last_update_ts_formatted[:4]
     month = last_update_ts_formatted[4:6]
