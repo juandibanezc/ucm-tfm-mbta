@@ -1,3 +1,5 @@
-catalog_info_trips_metrics:
-  last_ts: ${last_ts}
+catalog_info_gold_trips_metrics:
   catalog_dataset: gold_trips_metrics@spark
+
+catalog_info_gold_routes_forecast:
+  catalog_dataset: gold_routes_forecast@spark

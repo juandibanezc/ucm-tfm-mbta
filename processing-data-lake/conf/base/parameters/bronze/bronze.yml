@@ -87,7 +87,7 @@ catalog_info_bronze_schedules:
 
 catalog_info_bronze_points:
   keys:
-    - stop_id_mbta
+    - stop_id
   explode_column: false
   catalog_dataset: landing_points@spark
   columns:

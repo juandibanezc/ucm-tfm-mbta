@@ -2,6 +2,7 @@
 
 from kedro.pipeline import Pipeline, node, pipeline
 from processing_datalake.pipelines.gold_first_load.nodes.trips_metrics import create_trips_metrics_table
+from processing_datalake.pipelines.gold_first_load.nodes.routes_forecast import create_routes_forecast
 
 
 def create_pipeline(**kwargs) -> Pipeline:
@@ -18,7 +19,18 @@ def create_pipeline(**kwargs) -> Pipeline:
                 ],
                 outputs="gold_trips_metrics@spark",
                 name="gold_trips_metrics_transformation_first_load",
-                tags=["gold", "first_load"],
+                tags=["gold_first_load", "first_load"],
+            ),
+            node(
+                func=create_routes_forecast,
+                inputs=[
+                    "silver_grids@spark",
+                    "silver_points@spark",
+                    "silver_schedules@spark"
+                ],
+                outputs="gold_routes_forecast@spark",
+                name="gold_routes_forecast_first_load",
+                tags=["gold_first_load", "first_load"],
             ),
         ]
     )

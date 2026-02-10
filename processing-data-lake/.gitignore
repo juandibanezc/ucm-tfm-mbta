@@ -11,6 +11,7 @@ notebooks/
 
 # ignore potentially sensitive credentials files
 conf/**/*credentials*
+!conf/base/credentials.yml
 
 # ignore everything in the following folders
 data/**
