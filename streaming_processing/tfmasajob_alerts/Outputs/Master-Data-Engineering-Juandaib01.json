@@ -1,0 +1,12 @@
+{
+    "Name": "Master-Data-Engineering-Juandaib01",
+    "DataSourceType": "Power BI",
+    "PowerBIProperties": {
+        "GroupName": "Master Data Engineering Juandaib01",
+        "GroupId": "5b2a2a3d-2db1-48a4-9d09-a668e4cc9987",
+        "Dataset": "tfmasajob_alerts",
+        "Table": "stream_alerts",
+        "AuthenticationMode": "Msi"
+    },
+    "ScriptType": "Output"
+}

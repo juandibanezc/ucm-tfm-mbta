@@ -1,0 +1,18 @@
+{
+  "Name": "alerts",
+  "Type": "Data Stream",
+  "DataSourceType": "Microsoft.ServiceBus/EventHub",
+  "Properties": {
+    "ServiceBusNamespace": "tfmmbta",
+    "EventHubName": "alerts",
+    "SharedAccessPolicyName": "tfmasajob_alerts_policy",
+    "SharedAccessPolicyKey": null,
+    "ConsumerGroupName": "$Default",
+    "Serialization": {
+      "Type": "JSON",
+      "Properties": {
+        "Encoding": "UTF8"
+      }
+    }
+  }
+}

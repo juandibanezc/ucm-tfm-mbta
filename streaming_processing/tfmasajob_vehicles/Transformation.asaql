@@ -1,0 +1,28 @@
+SELECT
+    -- Endpoint fields
+    TRY_CAST([vehicles].[record_id] AS nvarchar(max))        AS [record_id],
+    TRY_CAST([vehicles].[record_type] AS nvarchar(max))      AS [record_type],
+    TRY_CAST(COALESCE([vehicles].[bearing], -1) AS bigint)   AS [bearing],
+    TRY_CAST([vehicles].[current_stop_sequence] AS bigint)   AS [stop_sequence],
+    TRY_CAST([vehicles].[direction_id] AS bigint)            AS [direction_id],
+    TRY_CAST(COALESCE([vehicles].[speed], 0.0) AS float)     AS [speed],
+    TRY_CAST([vehicles].[latitude] AS float)                 AS [latitude],
+    TRY_CAST([vehicles].[longitude] AS float)                AS [longitude],
+    TRY_CAST([vehicles].[occupancy_status] AS nvarchar(max)) AS [occupancy_status],
+    TRY_CAST([vehicles].[current_status] AS nvarchar(max))   AS [current_status],
+    TRY_CAST([vehicles].[label] AS nvarchar(max))            AS [label],
+    -- Audit fields
+    TRY_CAST([vehicles].[created_at] AS datetime)            AS [created_at],
+    TRY_CAST([vehicles].[updated_at] AS datetime)            AS [updated_at],
+    -- Relationships
+    TRY_CAST([vehicles].[trip_id] AS nvarchar(max))          AS [trip_id],
+    TRY_CAST([vehicles].[stop_id] AS nvarchar(max))          AS [stop_id],
+    TRY_CAST([vehicles].[route_id] AS nvarchar(max))         AS [route_id],
+    -- Event timestamps
+    TRY_CAST([vehicles].[polled_at_utc] AS datetime)         AS [event_polled_utc_time],
+    TRY_CAST([vehicles].[EventProcessedUtcTime] AS datetime) AS [event_processed_utc_time],
+    TRY_CAST([vehicles].[EventEnqueuedUtcTime] AS datetime)  AS [event_enqueued_utc_time]
+INTO
+    [Master-Data-Engineering-Juandaib01]
+FROM
+    [vehicles]
