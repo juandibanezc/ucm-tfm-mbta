@@ -1,0 +1,45 @@
+SELECT
+    -- Endpoint fields
+    TRY_CAST([alerts].[record_id] AS nvarchar(max))          AS [alert_id],
+    TRY_CAST([alerts].[record_type] AS nvarchar(max))        AS [record_type],
+    TRY_CAST([alerts].[effect] AS nvarchar(max))             AS [effect],
+    TRY_CAST([alerts].[cause] AS nvarchar(max))              AS [cause],
+    TRY_CAST([alerts].[severity] AS bigint)                  AS [severity],
+    TRY_CAST([alerts].[header] AS nvarchar(max))             AS [header],
+    TRY_CAST([alerts].[description] AS nvarchar(max))        AS [description],
+    TRY_CAST([alerts].[direction_id] AS bigint)              AS [direction_id],
+    TRY_CAST(GetArrayElement([alerts].[active_period],0).[start] AS datetime)   AS [alert_start],
+    TRY_CAST(GetArrayElement([alerts].[active_period],0).[end] AS datetime)     AS [alert_end],
+    -- Analytical fields
+    CASE
+        WHEN [alerts].[lifecycle] = 'ONGOING' THEN 1
+        ELSE 0
+    END                                                      AS [is_active_alert],
+    CASE
+        WHEN GetArrayElement([alerts].[active_period],0).[end] IS NOT NULL THEN
+            DATEDIFF(
+                minute,
+                TRY_CAST(GetArrayElement([alerts].[active_period],0).[start] AS datetime),
+                TRY_CAST(GetArrayElement([alerts].[active_period],0).[end] AS datetime)
+            )
+        ELSE
+            DATEDIFF(
+                minute,
+                TRY_CAST(GetArrayElement([alerts].[active_period],0).[start] AS datetime),
+                TRY_CAST([alerts].[EventProcessedUtcTime] AS datetime)
+            )
+    END                                                      AS [alert_duration_minutes],
+    -- Relationships
+    TRY_CAST([alerts].[route_ids] AS array)                  AS [route_ids],
+    TRY_CAST([alerts].[stop_ids] AS array)                   AS [stop_ids],
+    -- Audit fields
+    TRY_CAST([alerts].[created_at] AS datetime)              AS [created_at],
+    TRY_CAST([alerts].[updated_at] AS datetime)              AS [updated_at],
+    -- Event timestamps
+    TRY_CAST([alerts].[polled_at_utc] AS datetime)           AS [event_polled_utc_time],
+    TRY_CAST([alerts].[EventProcessedUtcTime] AS datetime)   AS [event_processed_utc_time],
+    TRY_CAST([alerts].[EventEnqueuedUtcTime] AS datetime)    AS [event_enqueued_utc_time]
+INTO
+    [Master-Data-Engineering-Juandaib01]
+FROM
+    [alerts]

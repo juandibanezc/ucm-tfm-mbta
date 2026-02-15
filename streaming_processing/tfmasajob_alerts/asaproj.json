@@ -1,0 +1,14 @@
+{
+    "name": "tfmasajob_alerts",
+    "startFile": "Transformation.asaql",
+    "configurations": [
+        {
+            "filePath": "JobConfig.json",
+            "subType": "JobConfig"
+        },
+        {
+            "filePath": "Outputs/Master-Data-Engineering-Juandaib01.json",
+            "subType": "Output"
+        }
+    ]
+}

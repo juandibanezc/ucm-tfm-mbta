@@ -1,0 +1,29 @@
+SELECT
+    -- Endpoint fields
+    TRY_CAST([predictions].[record_id] AS nvarchar(max))     AS [prediction_id],
+    TRY_CAST([predictions].[record_type] AS nvarchar(max))   AS [record_type],
+    TRY_CAST([predictions].[departure_time] AS datetime)     AS [predicted_departure_utc_time],
+    TRY_CAST([predictions].[arrival_time] AS datetime)       AS [predicted_arrival_utc_time],
+    TRY_CAST([predictions].[direction_id] AS bigint)         AS [direction_id],
+    TRY_CAST([predictions].[stop_sequence] AS bigint)        AS [stop_sequence],
+    TRY_CAST([predictions].[status] AS nvarchar(max))        AS [status],
+    TRY_CAST([predictions].[schedule_relationship] AS nvarchar(max))
+                                                            AS [schedule_relationship],
+    -- Relationships
+    TRY_CAST([predictions].[route_id] AS nvarchar(max))      AS [route_id],
+    TRY_CAST([predictions].[trip_id] AS nvarchar(max))       AS [trip_id],
+    TRY_CAST([predictions].[stop_id] AS nvarchar(max))       AS [stop_id],
+    -- Audit fields
+    TRY_CAST([predictions].[created_at] AS datetime)         AS [created_at],
+    TRY_CAST([predictions].[updated_at] AS datetime)         AS [updated_at],
+    -- Event timestamps
+    TRY_CAST([predictions].[polled_at_utc] AS datetime)      AS [event_polled_utc_time],
+    TRY_CAST([predictions].[EventProcessedUtcTime] AS datetime)
+                                                             AS [event_processed_utc_time],
+    TRY_CAST([predictions].[EventEnqueuedUtcTime] AS datetime)
+                                                             AS [event_enqueued_utc_time]
+
+INTO
+    [Master-Data-Engineering-Juandaib01]
+FROM
+    [predictions]
