@@ -1,0 +1,39 @@
+table Ultima_Actualizacion
+	lineageTag: 3fefe8d2-b320-4260-b7f7-1b6131c31cd6
+
+	measure 'Fecha Última Actualización' = ```
+			
+			"Última actualización realizada el "
+			& FORMAT ( MAX ( Ultima_Actualizacion[Ultima_Actualizacion] ), "dd/MM/yyyy HH:mm" )
+			& " UTC-05:00"
+			
+			```
+		lineageTag: da1b1935-ce2a-40b0-953b-105ac1793323
+
+	column Ultima_Actualizacion
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 1da6fbe4-8a8b-4da0-bf7f-9d7deb0f5f5f
+		summarizeBy: none
+		sourceColumn: Ultima_Actualizacion
+
+		variation Variación
+			isDefault
+			relationship: 7a45d81f-8deb-42bb-908c-6b3e9e45b974
+			defaultHierarchy: LocalDateTable_f5d9171b-3a1c-4025-b37e-34d50a73ad65.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Ultima_Actualizacion = m
+		mode: import
+		queryGroup: DATA
+		source =
+				let
+				    FechaActualizacion = DateTimeZone.SwitchZone(DateTimeZone.UtcNow(), -5)
+				in
+				    FechaActualizacion
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = DateTimeZone
+

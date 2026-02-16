@@ -1,0 +1,20 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
+  "name": "a5cbeb446475bcd23352",
+  "displayName": "Historico",
+  "displayOption": "FitToPage",
+  "height": 1080,
+  "width": 1920,
+  "visualInteractions": [
+    {
+      "source": "9011d91e3c8e024af9db",
+      "target": "1ca6cc53e0a82ac0466d",
+      "type": "NoFilter"
+    },
+    {
+      "source": "9011d91e3c8e024af9db",
+      "target": "16beb20fc85b4a76752e",
+      "type": "NoFilter"
+    }
+  ]
+}

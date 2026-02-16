@@ -1,0 +1,162 @@
+table stream_predictions
+	lineageTag: 1119a69b-2404-4fe9-9c77-2a0b3c50b288
+
+	column prediction_id
+		dataType: string
+		lineageTag: 66fb53b9-33d3-4f4b-9fc0-076bfe34cbb2
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: prediction_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column record_type
+		dataType: string
+		lineageTag: 0698a64d-182a-4e7a-a529-783f536bbf87
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: record_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column route_id
+		dataType: string
+		lineageTag: 7291cf19-ba0b-4c4c-8015-a37d0b8b8c07
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: route_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column trip_id
+		dataType: string
+		lineageTag: c02185ee-cb42-4271-b1b3-389c1e482a86
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: trip_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column stop_id
+		dataType: string
+		lineageTag: 88903310-6f46-4ae7-8613-2155b0f1a959
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: stop_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column direction_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 5540e681-f70f-402b-802f-3bee019168da
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: direction_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column stop_sequence
+		dataType: int64
+		formatString: 0
+		lineageTag: 03dce401-d866-4ea6-b6b0-f4287257610e
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: stop_sequence
+
+		annotation SummarizationSetBy = Automatic
+
+	column schedule_relationship
+		dataType: string
+		lineageTag: 003fcc7e-e55e-4564-bf41-71cc4966f3bb
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: schedule_relationship
+
+		annotation SummarizationSetBy = Automatic
+
+	column predicted_arrival_utc_time
+		dataType: dateTime
+		formatString: mm/dd/yy hh:nn:ss AM/PM
+		lineageTag: b23b31e6-e404-40d9-9e05-f971b7a1406f
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: predicted_arrival_utc_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column predicted_departure_utc_time
+		dataType: dateTime
+		formatString: mm/dd/yy hh:nn:ss AM/PM
+		lineageTag: 7261462f-5a8b-44d7-b014-f3135d84d167
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: predicted_departure_utc_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column event_processed_utc_time
+		dataType: dateTime
+		formatString: mm/dd/yy hh:nn:ss AM/PM
+		lineageTag: 86345378-444b-41e9-9e02-26138a0788cc
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: event_processed_utc_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column event_enqueued_utc_time
+		dataType: dateTime
+		formatString: mm/dd/yy hh:nn:ss AM/PM
+		lineageTag: c6925de1-4687-4cd1-aba5-6ac5cf704e5e
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: event_enqueued_utc_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column status
+		dataType: string
+		lineageTag: cdcbc540-3b2f-4d7f-9a75-f55b418b77c7
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: status
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: mm/dd/yy hh:nn:ss AM/PM
+		lineageTag: de6149a9-d241-4c59-aa8c-612db2fc9497
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: mm/dd/yy hh:nn:ss AM/PM
+		lineageTag: ba704f99-cf0f-4ba6-a24b-d5e744140145
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column event_polled_utc_time
+		dataType: dateTime
+		formatString: mm/dd/yy hh:nn:ss AM/PM
+		lineageTag: c6d2b755-f032-49fe-b992-4b51a90dd69b
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: event_polled_utc_time
+
+		annotation SummarizationSetBy = Automatic
+
+	partition stream_predictions = entity
+		mode: directQuery
+		source
+			entityName: stream_predictions
+			expressionSource: 'De DirectQuery a AS: tfmasajob_predictions'
+

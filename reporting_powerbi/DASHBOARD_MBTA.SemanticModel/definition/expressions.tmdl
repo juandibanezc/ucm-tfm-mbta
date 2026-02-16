@@ -1,0 +1,33 @@
+expression 'De DirectQuery a AS: tfmasajob_alerts' =
+		let
+		    Source = AnalysisServices.Database("powerbi://api.powerbi.com/v1.0/myorg/Master%20Data%20Engineering%20Juandaib01", "tfmasajob_alerts"),
+		    Cubes = Table.Combine(Source[Data]),
+		    Cube = Cubes{[Id="tfmasajob_alerts", Kind="Cube"]}[Data]
+		in
+		    Cube
+	lineageTag: 90092df6-2b24-42af-a71f-4d5326efbf8e
+
+	annotation PBI_IncludeFutureArtifacts = True
+
+expression 'De DirectQuery a AS: tfmasajob_predictions' =
+		let
+		    Source = AnalysisServices.Database("powerbi://api.powerbi.com/v1.0/myorg/Master%20Data%20Engineering%20Juandaib01", "tfmasajob_predictions"),
+		    Cubes = Table.Combine(Source[Data]),
+		    Cube = Cubes{[Id="tfmasajob_predictions", Kind="Cube"]}[Data]
+		in
+		    Cube
+	lineageTag: d0d30550-374e-439a-8e42-c65c08db82d0
+
+	annotation PBI_IncludeFutureArtifacts = True
+
+expression 'De DirectQuery a AS: tfmasajob_vehicles' =
+		let
+		    Source = AnalysisServices.Database("powerbi://api.powerbi.com/v1.0/myorg/Master%20Data%20Engineering%20Juandaib01", "tfmasajob_vehicles"),
+		    Cubes = Table.Combine(Source[Data]),
+		    Cube = Cubes{[Id="tfmasajob_vehicles", Kind="Cube"]}[Data]
+		in
+		    Cube
+	lineageTag: 0c2f5ade-2691-47cf-880a-60c92af0e63c
+
+	annotation PBI_IncludeFutureArtifacts = True
+

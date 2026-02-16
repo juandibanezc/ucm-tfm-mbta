@@ -1,0 +1,194 @@
+table stream_vehicles
+	lineageTag: 9f70fc2f-cf5d-43d6-8e0a-89c80034d4b2
+
+	column bearing
+		dataType: int64
+		formatString: 0
+		lineageTag: 069050f7-a14c-45e4-a50c-08bd3c675fe1
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: bearing
+
+		annotation SummarizationSetBy = Automatic
+
+	column stop_sequence
+		dataType: int64
+		formatString: 0
+		lineageTag: 8566f001-f045-4f0f-b67e-1606a0ed23b1
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: stop_sequence
+
+		annotation SummarizationSetBy = Automatic
+
+	column direction_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 3a649640-6be6-42ca-9e8b-7ac8e07bcf44
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: direction_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column speed
+		dataType: double
+		lineageTag: 1e485f38-c04e-47b1-b507-1e77aeb7b4ae
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: speed
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column record_type
+		dataType: string
+		lineageTag: f0124a7f-da88-4427-9a92-d1fe502a4495
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: record_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column latitude
+		dataType: double
+		lineageTag: d12ce1f1-9d56-40ca-93c7-f6af16e7698d
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: latitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column longitude
+		dataType: double
+		lineageTag: 7630b161-3983-48f4-b907-00683c8487a1
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: longitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column occupancy_status
+		dataType: string
+		lineageTag: ec726de2-f2ca-427c-910b-a8b521c4c194
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: occupancy_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column current_status
+		dataType: string
+		lineageTag: 71fc01b6-3cd7-4cbe-9d1f-c91b6f34039a
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: current_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column label
+		dataType: string
+		lineageTag: fc7109b5-c9cc-4428-86ee-ae0a8ddc205e
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: label
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: mm/dd/yy hh:nn:ss AM/PM
+		lineageTag: 0257e788-c7a3-4739-87aa-98abb4ec0be4
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: mm/dd/yy hh:nn:ss AM/PM
+		lineageTag: 521896a6-1b00-4ac6-a0f9-9098d7054dd2
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column trip_id
+		dataType: string
+		lineageTag: 649172ce-9a02-4e94-b437-2f4cb20724fa
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: trip_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column stop_id
+		dataType: string
+		lineageTag: a73f4e65-54b4-42ab-808a-50bc3e60e45e
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: stop_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column route_id
+		dataType: string
+		lineageTag: 10e945eb-b885-4521-924f-3fadc2f26a23
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: route_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column event_polled_utc_time
+		dataType: dateTime
+		formatString: mm/dd/yy hh:nn:ss AM/PM
+		lineageTag: aad187fe-f0b7-45e4-aaf9-81297d924bb3
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: event_polled_utc_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column event_processed_utc_time
+		dataType: dateTime
+		formatString: mm/dd/yy hh:nn:ss AM/PM
+		lineageTag: 8ec8a9a5-ce89-47b4-bb8d-484c4e98ba11
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: event_processed_utc_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column event_enqueued_utc_time
+		dataType: dateTime
+		formatString: mm/dd/yy hh:nn:ss AM/PM
+		lineageTag: adf0fc64-76b4-49fd-8b85-8b3c704d99f9
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: event_enqueued_utc_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column vehicle_id
+		dataType: string
+		lineageTag: 970344bc-eb9d-4a3f-b8f5-4d7fc59cfe41
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: vehicle_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition stream_vehicles = entity
+		mode: directQuery
+		source
+			entityName: stream_vehicles
+			expressionSource: 'De DirectQuery a AS: tfmasajob_vehicles'
+

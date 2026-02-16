@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "DASHBOARD_MBTA"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "bb06487e-5ded-4b56-89b0-829db42fece5"
+  }
+}

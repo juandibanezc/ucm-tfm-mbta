@@ -1,0 +1,115 @@
+table Data_Routes_forecast
+	lineageTag: 5d84ea3b-1f5d-488b-a16b-862b02ea4c64
+
+	column service_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: bdfeba28-1272-4e55-bfbd-9d3640186f93
+		summarizeBy: none
+		sourceColumn: service_date
+
+		variation Variación
+			isDefault
+			relationship: fcb5fce3-9c11-4d38-916b-e0315411850c
+			defaultHierarchy: LocalDateTable_7970b1bf-ad48-4c4a-b8a8-70ff393225e4.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column trip_id
+		dataType: string
+		lineageTag: b1c5ca41-95b7-4944-822d-937ee473171f
+		summarizeBy: none
+		sourceColumn: trip_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column route_id
+		dataType: string
+		lineageTag: f4556358-38db-4936-85ca-5746ae30730b
+		summarizeBy: none
+		sourceColumn: route_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column max_probability_precipitation
+		dataType: int64
+		formatString: 0
+		lineageTag: cdccaf66-cc92-4042-91a1-f932a8cd9952
+		summarizeBy: sum
+		sourceColumn: max_probability_precipitation
+
+		annotation SummarizationSetBy = Automatic
+
+	column temperature
+		dataType: int64
+		formatString: 0
+		lineageTag: d6169340-4924-42cc-bd73-2a4c32bcfcee
+		summarizeBy: sum
+		sourceColumn: temperature
+
+		annotation SummarizationSetBy = Automatic
+
+	column forecast
+		dataType: string
+		lineageTag: 11bcdbc4-898c-4dac-937c-122718bd0c29
+		summarizeBy: none
+		sourceColumn: forecast
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_ts
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 4694c54f-5b14-410f-81a7-dfae81703ad9
+		summarizeBy: none
+		sourceColumn: created_ts
+
+		variation Variación
+			isDefault
+			relationship: 929b5ae2-9c91-4f91-91e4-fa1f4bef5614
+			defaultHierarchy: LocalDateTable_c37a969d-8517-41e0-b298-28e5b06a9c02.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_ts
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 2478fa27-c7c5-4610-8be7-f393e801de89
+		summarizeBy: none
+		sourceColumn: updated_ts
+
+		variation Variación
+			isDefault
+			relationship: 976380a4-85da-4d34-bc55-e3bb918f1030
+			defaultHierarchy: LocalDateTable_67dc8d62-c796-43e1-bf58-3ffd5fe77072.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column CompositeKey
+		dataType: string
+		lineageTag: f67956f0-bbed-409f-be0b-b24e4f8ffe34
+		summarizeBy: none
+		sourceColumn: CompositeKey
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Data_Routes_forecast = m
+		mode: import
+		queryGroup: DATA
+		source =
+				let
+				    Origen = Databricks.Catalogs("adb-7405612198535189.9.azuredatabricks.net", "sql/protocolv1/o/7405612198535189/0208-212621-78t7cnb4", null),
+				    tfmlakehouse_Database = Origen{[Name="tfmlakehouse",Kind="Database"]}[Data],
+				    gold_Schema = tfmlakehouse_Database{[Name="gold",Kind="Schema"]}[Data],
+				    routes_forecast_Table = gold_Schema{[Name="routes_forecast",Kind="Table"]}[Data],
+				    #"Filas filtradas" = Table.SelectRows(routes_forecast_Table, each ([service_date] <> null) and ([max_probability_precipitation] <> null)),
+				    #"Personalizada agregada" = Table.AddColumn(#"Filas filtradas", "CompositeKey", each Text.From([service_date]) & "-" & Text.From([trip_id]))
+				in
+				    #"Personalizada agregada"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+
