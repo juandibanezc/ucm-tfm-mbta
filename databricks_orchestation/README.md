@@ -1,6 +1,24 @@
 # Databricks Orchestration - TFM Big Data
 
+<div align="center">
+
+[![Powered by Databricks](https://img.shields.io/badge/Powered%20by-Databricks-FF3621?style=for-the-badge&logo=databricks)](https://databricks.com)
+
+</div>
+
 Este directorio contiene la configuración de orquestación para el proyecto **TFM Big Data** usando Databricks Asset Bundles (DAB) y el Databricks CLI.
+
+## 📋 Tabla de Contenido
+
+- [Estructura del Directorio](#estructura-del-directorio)
+- [Descripción de Componentes](#descripción-de-componentes)
+- [Requisitos Previos](#requisitos-previos)
+- [Comandos de Materialización](#comandos-de-materialización)
+- [Flujo de Materialización Recomendado](#flujo-de-materialización-recomendado)
+- [Variables y Customización](#variables-y-customización)
+- [Monitoreo y Logs](#monitoreo-y-logs)
+- [Solución de Problemas](#solución-de-problemas)
+- [Referencias](#referencias)
 
 ## Estructura del Directorio
 
@@ -231,4 +249,18 @@ Los jobs están configurados para alertas de email. Configurar en Databricks wor
 - [Documentación Databricks Asset Bundles](https://docs.databricks.com/en/dev-tools/bundles/index.html)
 - [Databricks CLI Documentation](https://docs.databricks.com/en/dev-tools/cli/)
 - [Databricks Jobs API](https://docs.databricks.com/en/dev-tools/api/jobs/)
+
+---
+
+<div align="center">
+
+### ⚡ Powered by Databricks
+
+**Databricks Orchestration** - Automatiza tu pipeline de datos con Databricks Asset Bundles y la CLI oficial.
+
+*Transforma datos en valor con la plataforma de datos más avanzada*
+
+[Visita Databricks.com](https://databricks.com) | [Community Edition](https://www.databricks.com/try-databricks)
+
+</div>
 
