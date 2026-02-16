@@ -97,6 +97,16 @@ def process_routes_forecast(
         F.col("g.short_forecast").alias("forecast")
     )
 
+    final_metrics = final_metrics.groupBy(
+        "service_date",
+        "trip_id",
+        "route_id",
+    ).agg(
+        F.first("max_probability_precipitation").alias("max_probability_precipitation"),
+        F.first("temperature").alias("temperature"),
+        F.first("forecast").alias("forecast")
+    )
+
     return final_metrics
 
 
