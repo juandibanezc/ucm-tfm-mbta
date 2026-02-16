@@ -95,10 +95,17 @@ def process_routes_forecast(
         F.col("g.probability_precipitation").alias("max_probability_precipitation"),
         F.col("g.temperature").alias("temperature"),
         F.col("g.short_forecast").alias("forecast")
-    ).distinct().filter(
+    ).distinct().withColumn(
+        "row_number_temp",
+        F.row_number().over(
+            W.partitionBy("service_date", "trip_id", "temperature")
+            .orderBy(F.col("max_probability_precipitation").desc())
+        )
+    ).filter(
         (F.col("service_date").isNotNull())
         & (F.col("max_probability_precipitation").isNotNull())
-    )
+        & (F.col("row_number_temp") == 1)
+    ).drop("row_number_temp")
 
     return final_metrics
 
