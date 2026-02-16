@@ -98,7 +98,7 @@ Funciones temporales para agregaciones:
 
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
-| `record_id` | nvarchar(max) | ID del vehículo |
+| `vehicle_id` | nvarchar(max) | ID del vehículo |
 | `record_type` | nvarchar(max) | Tipo de registro ("vehicle") |
 | `bearing` | bigint | Dirección en grados (0-360, -1 si NULL) |
 | `stop_sequence` | bigint | Secuencia de parada actual |
@@ -122,7 +122,7 @@ Funciones temporales para agregaciones:
 
 ```sql
 SELECT
-    TRY_CAST([vehicles].[record_id] AS nvarchar(max))        AS [record_id],
+    TRY_CAST([vehicles].[record_id] AS nvarchar(max))        AS [vehicle_id],
     TRY_CAST(COALESCE([vehicles].[bearing], -1) AS bigint)   AS [bearing],
     TRY_CAST(COALESCE([vehicles].[speed], 0.0) AS float)     AS [speed],
     TRY_CAST([vehicles].[latitude] AS float)                 AS [latitude],

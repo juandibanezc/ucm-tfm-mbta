@@ -102,7 +102,7 @@ Cada evento enviado a Event Hubs tiene la siguiente estructura:
   "source": "mbta-v3",
   "endpoint": "/vehicles",
   "record_type": "vehicle",
-  "record_id": "y1799",
+  "vehicle_id": "y1799",
   "filter_route": "Red",
   "polled_at_utc": "2026-02-15T20:30:00.123456+00:00",
   
@@ -369,7 +369,7 @@ def flatten_record(record, endpoint):
 {
   "source": "mbta-v3",
   "endpoint": "/vehicles",
-  "record_id": "y1799",
+  "vehicle_id": "y1799",
   "latitude": 42.365486,
   "longitude": -71.103802,
   "bearing": 180,
