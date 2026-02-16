@@ -37,6 +37,9 @@ El dashboard proporciona insights sobre:
 - ✅ **Temas personalizados**: Colores MBTA (verde, azul, naranja, rojo)
 - ✅ **Embeddable**: Puede integrarse en aplicaciones web
 
+### Link del Dashboard
+[Ver Dashboard en Power BI (solo usuarios ucm.es)](https://app.powerbi.com/links/DMltDUhNgs?ctid=2b079dc7-e2ea-45bc-9182-0fde14b549b1&pbi_source=linkShare&bookmarkGuid=a2e96990-5c83-4d63-af71-bc4dcd862c5a)
+
 ---
 
 ## ¿Qué es Power BI?
