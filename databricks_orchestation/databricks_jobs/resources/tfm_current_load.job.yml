@@ -1,0 +1,103 @@
+resources:
+  jobs:
+    tfm_current_load:
+      name: tfm_current_load
+      job_clusters:
+        - job_cluster_key: current_load_cluster
+          new_cluster:
+            cluster_name: ""
+            data_security_mode: DATA_SECURITY_MODE_DEDICATED
+            is_single_node: true
+            kind: CLASSIC_PREVIEW
+            node_type_id: Standard_D4ds_v4
+            runtime_engine: PHOTON
+            spark_conf:
+              "spark.hadoop.fs.azure.account.key.tfmmbtasta.dfs.core.windows.net": "{{secrets/kedro-secrets/azure-account-key}}"
+              "spark.jars.packages": "org.apache.hadoop:hadoop-azure:3.3.4,com.microsoft.azure:azure-storage:8.6.6,io.delta:delta-spark_2.12:3.1.0,io.delta:delta-storage:3.1.0"
+              "spark.sql.extensions": "io.delta.sql.DeltaSparkSessionExtension"
+              "spark.sql.catalog.spark_catalog": "org.apache.spark.sql.delta.catalog.DeltaCatalog"
+            spark_env_vars:
+              PYSPARK_PYTHON: /databricks/python3/bin/python3
+              MBTA_API_KEY: '{{secrets/kedro-secrets/mbta_api_key}}'
+              AZURE_ACCOUNT_NAME: '{{secrets/kedro-secrets/azure-account-name}}'
+              AZURE_ACCOUNT_KEY: '{{secrets/kedro-secrets/azure-account-key}}'
+            spark_version: 16.4.x-scala2.12
+      tasks:
+        - task_key: landing
+          job_cluster_key: current_load_cluster
+          email_notifications: {}
+          libraries:
+            - whl: /Workspace/Users/juandaib@ucm.es/artifacts/processing_datalake-0.1-py3-none-any.whl
+          python_wheel_task:
+            entry_point: processing-datalake
+            named_parameters:
+              conf-source: /Workspace/Users/juandaib@ucm.es/configuration/conf-processing_datalake.tar.gz
+              pipeline: landing
+              runner: SequentialRunner
+            package_name: processing_datalake
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
+          webhook_notifications: {}
+        - task_key: bronze
+          depends_on:
+            - task_key: landing
+          job_cluster_key: current_load_cluster
+          email_notifications: {}
+          libraries:
+            - whl: /Workspace/Users/juandaib@ucm.es/artifacts/processing_datalake-0.1-py3-none-any.whl
+          python_wheel_task:
+            entry_point: processing-datalake
+            named_parameters:
+              conf-source: /Workspace/Users/juandaib@ucm.es/configuration/conf-processing_datalake.tar.gz
+              pipeline: bronze
+              runner: SequentialRunner
+            package_name: processing_datalake
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
+          webhook_notifications: {}
+        - task_key: silver
+          depends_on:
+            - task_key: bronze
+          job_cluster_key: current_load_cluster
+          email_notifications: {}
+          libraries:
+            - whl: /Workspace/Users/juandaib@ucm.es/artifacts/processing_datalake-0.1-py3-none-any.whl
+          python_wheel_task:
+            entry_point: processing-datalake
+            named_parameters:
+              conf-source: /Workspace/Users/juandaib@ucm.es/configuration/conf-processing_datalake.tar.gz
+              pipeline: silver
+              runner: ThreadRunner
+            package_name: processing_datalake
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
+          webhook_notifications: {}
+        - task_key: gold
+          depends_on:
+            - task_key: silver
+          job_cluster_key: current_load_cluster
+          email_notifications: {}
+          libraries:
+            - whl: /Workspace/Users/juandaib@ucm.es/artifacts/processing_datalake-0.1-py3-none-any.whl
+          python_wheel_task:
+            entry_point: processing-datalake
+            named_parameters:
+              conf-source: /Workspace/Users/juandaib@ucm.es/configuration/conf-processing_datalake.tar.gz
+              pipeline: gold
+              runner: ThreadRunner
+            package_name: processing_datalake
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
+          webhook_notifications: {}
+      email_notifications:
+        no_alert_for_skipped_runs: false
+      max_concurrent_runs: 1
+      performance_target: PERFORMANCE_OPTIMIZED
+      queue:
+        enabled: true
+      schedule:
+        pause_status: UNPAUSED
+        quartz_cron_expression: 0 0 4 * * ?
+        timezone_id: America/Bogota
+      timeout_seconds: 0
+      webhook_notifications: {}
