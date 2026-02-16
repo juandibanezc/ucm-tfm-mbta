@@ -1,6 +1,6 @@
 SELECT
     -- Endpoint fields
-    TRY_CAST([vehicles].[record_id] AS nvarchar(max))        AS [record_id],
+    TRY_CAST([vehicles].[record_id] AS nvarchar(max))        AS [vehicle_id],
     TRY_CAST([vehicles].[record_type] AS nvarchar(max))      AS [record_type],
     TRY_CAST(COALESCE([vehicles].[bearing], -1) AS bigint)   AS [bearing],
     TRY_CAST([vehicles].[current_stop_sequence] AS bigint)   AS [stop_sequence],
