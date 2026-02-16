@@ -1,0 +1,193 @@
+table Data_Trips_metrics
+	lineageTag: fad2e498-457c-40c7-8714-9444b51a7970
+
+	column service_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: e32ba8b3-cd60-4d76-9df7-fda9452cb441
+		summarizeBy: none
+		sourceColumn: service_date
+
+		variation Variación
+			isDefault
+			relationship: 50fd695c-2daa-4e80-bed6-0f06d64f8ddc
+			defaultHierarchy: LocalDateTable_4b9cbdeb-74fc-4165-8d83-95f2bfb68aec.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column trip_id
+		dataType: string
+		lineageTag: 1fe1c253-805c-49d9-b29d-12c5caf2bbbb
+		summarizeBy: none
+		sourceColumn: trip_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column route_id
+		dataType: string
+		lineageTag: bea45b3d-b0a9-4d23-a6aa-353b96b56966
+		summarizeBy: none
+		sourceColumn: route_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column direction_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 8102b7be-96fb-4881-8625-bbeae997e7a3
+		summarizeBy: sum
+		sourceColumn: direction_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column departure_time
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 8fb527dd-ccee-482d-b15a-cb762c979257
+		summarizeBy: none
+		sourceColumn: departure_time
+
+		variation Variación
+			isDefault
+			relationship: 7b2ed819-358c-49a5-bdfb-7df4cf612e65
+			defaultHierarchy: LocalDateTable_1a226c11-c3f0-4b2f-a3b4-9a48d9c4f824.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column arrival_time
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: bc2714c4-d0e4-4929-9096-1aad824d6bfc
+		summarizeBy: none
+		sourceColumn: arrival_time
+
+		variation Variación
+			isDefault
+			relationship: 51f1892c-c0e9-49d6-a6d8-13dfa8077f6d
+			defaultHierarchy: LocalDateTable_3250cc98-0ca9-4fde-9bff-e021780e16bc.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column route_pattern_name
+		dataType: string
+		lineageTag: ec925937-8906-4abb-9bc5-347203c199f9
+		summarizeBy: none
+		sourceColumn: route_pattern_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column route_pattern_time_desc
+		dataType: string
+		lineageTag: f167ed84-c774-4c16-a242-637df772bfe5
+		summarizeBy: none
+		sourceColumn: route_pattern_time_desc
+
+		annotation SummarizationSetBy = Automatic
+
+	column trip_headsign
+		dataType: string
+		lineageTag: 736d732d-4d34-44b4-afea-8b1aa60fcb1a
+		summarizeBy: none
+		sourceColumn: trip_headsign
+
+		annotation SummarizationSetBy = Automatic
+
+	column route_long_name
+		dataType: string
+		lineageTag: 9e3cee8e-95f3-4213-8c34-5429e2092f55
+		summarizeBy: none
+		sourceColumn: route_long_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column route_fare_class
+		dataType: string
+		lineageTag: b945d143-d077-41fb-b251-9e363a929ad0
+		summarizeBy: none
+		sourceColumn: route_fare_class
+
+		annotation SummarizationSetBy = Automatic
+
+	column direction_destination
+		dataType: string
+		lineageTag: 30fbd963-4749-4712-b093-43af1f0338aa
+		summarizeBy: none
+		sourceColumn: direction_destination
+
+		annotation SummarizationSetBy = Automatic
+
+	column num_stops
+		dataType: int64
+		formatString: 0
+		lineageTag: a9dce78c-2376-47ab-b0fb-537741633e10
+		summarizeBy: sum
+		sourceColumn: num_stops
+
+		annotation SummarizationSetBy = Automatic
+
+	column duration_minutes
+		dataType: double
+		lineageTag: 2844e6af-bab6-4c74-a677-19fc8c950c86
+		summarizeBy: sum
+		sourceColumn: duration_minutes
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column created_ts
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: fd9d53eb-431b-4727-8a7a-6dafc5eb9afd
+		summarizeBy: none
+		sourceColumn: created_ts
+
+		variation Variación
+			isDefault
+			relationship: 4b4b2863-0335-4440-8d84-7988f9a9f141
+			defaultHierarchy: LocalDateTable_992d1534-0280-4a76-b7a8-dcfb02ea1da2.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_ts
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 5ef81bd6-14d9-4295-a197-437b6a10f7d0
+		summarizeBy: none
+		sourceColumn: updated_ts
+
+		variation Variación
+			isDefault
+			relationship: 44516eb8-f62b-43e8-aae3-a9d8ef22dd00
+			defaultHierarchy: LocalDateTable_2a47c0cd-76f9-4e8e-ac03-3ca84822fdeb.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column CompositeKey
+		dataType: string
+		lineageTag: ac909d6c-e905-4883-b91a-3aa8804be65d
+		summarizeBy: none
+		sourceColumn: CompositeKey
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Data_Trips_metrics = m
+		mode: import
+		queryGroup: DATA
+		source =
+				let
+				    Origen = Databricks.Catalogs("adb-7405612198535189.9.azuredatabricks.net", "sql/protocolv1/o/7405612198535189/0208-212621-78t7cnb4", null),
+				    tfmlakehouse_Database = Origen{[Name="tfmlakehouse",Kind="Database"]}[Data],
+				    gold_Schema = tfmlakehouse_Database{[Name="gold",Kind="Schema"]}[Data],
+				    trips_metrics_Table = gold_Schema{[Name="trips_metrics",Kind="Table"]}[Data],
+				    #"Filas filtradas" = Table.SelectRows(trips_metrics_Table, each ([route_fare_class] <> null)),
+				    #"Personalizada agregada" = Table.AddColumn(#"Filas filtradas", "CompositeKey", each Text.From([service_date]) & "-" & Text.From([trip_id]))
+				in
+				    #"Personalizada agregada"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

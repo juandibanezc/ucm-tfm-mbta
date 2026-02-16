@@ -1,0 +1,191 @@
+table stream_alerts
+	lineageTag: 34837e5b-8926-4940-ae62-ba0198f85fa5
+
+	column alert_id
+		dataType: string
+		lineageTag: 80c88772-1aac-4b1f-b81a-0b8c379b41eb
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: alert_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column record_type
+		dataType: string
+		lineageTag: 17b08e89-6261-4dcf-93f6-8094573759c5
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: record_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column effect
+		dataType: string
+		lineageTag: a8eed159-8f35-4a16-90a1-65d5abeb9254
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: effect
+
+		annotation SummarizationSetBy = Automatic
+
+	column cause
+		dataType: string
+		lineageTag: 618b7e88-5499-4f76-aaef-8612f275af88
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: cause
+
+		annotation SummarizationSetBy = Automatic
+
+	column severity
+		dataType: int64
+		formatString: 0
+		lineageTag: 3ca45b73-bcc7-4f67-abd8-5737cb891529
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: severity
+
+		annotation SummarizationSetBy = Automatic
+
+	column header
+		dataType: string
+		lineageTag: 30d6a1fe-192f-4f04-84ac-d1cd040b2d3b
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: header
+
+		annotation SummarizationSetBy = Automatic
+
+	column description
+		dataType: string
+		lineageTag: aae33036-8c57-4ea8-a5aa-0c19d938aea7
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: description
+
+		annotation SummarizationSetBy = Automatic
+
+	column route_ids
+		dataType: string
+		lineageTag: 0b54cb02-c3b5-429a-8d47-05d0bd19d38e
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: route_ids
+
+		annotation SummarizationSetBy = Automatic
+
+	column stop_ids
+		dataType: string
+		lineageTag: 66468193-a143-4121-bdb8-60360f0fc60f
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: stop_ids
+
+		annotation SummarizationSetBy = Automatic
+
+	column direction_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 40c0e919-827a-478e-a32a-f3be5dc9f08f
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: direction_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: mm/dd/yy hh:nn:ss AM/PM
+		lineageTag: 6907f917-a3ad-4f35-a94e-2bff2c82e62f
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_at
+		dataType: dateTime
+		formatString: mm/dd/yy hh:nn:ss AM/PM
+		lineageTag: 858800b9-b4e5-4c90-871d-062d9db230e8
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: updated_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_active_alert
+		dataType: int64
+		formatString: 0
+		lineageTag: 6f50887d-77ab-4f3f-a0bb-a6a0f7d5f12d
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: is_active_alert
+
+		annotation SummarizationSetBy = Automatic
+
+	column alert_start
+		dataType: dateTime
+		formatString: mm/dd/yy hh:nn:ss AM/PM
+		lineageTag: c7edd6b7-65a8-44b4-b6bd-0bf384f235c1
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: alert_start
+
+		annotation SummarizationSetBy = Automatic
+
+	column alert_end
+		dataType: dateTime
+		formatString: mm/dd/yy hh:nn:ss AM/PM
+		lineageTag: 538f0520-01db-4ac1-9331-b443e45c2a46
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: alert_end
+
+		annotation SummarizationSetBy = Automatic
+
+	column alert_duration_minutes
+		dataType: int64
+		formatString: 0
+		lineageTag: 08aa0904-03a0-445a-bbca-9031647fecb6
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: alert_duration_minutes
+
+		annotation SummarizationSetBy = Automatic
+
+	column event_polled_utc_time
+		dataType: dateTime
+		formatString: mm/dd/yy hh:nn:ss AM/PM
+		lineageTag: 73aa78a8-593d-41c1-a983-bd8172781175
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: event_polled_utc_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column event_processed_utc_time
+		dataType: dateTime
+		formatString: mm/dd/yy hh:nn:ss AM/PM
+		lineageTag: 19b244dc-b312-4374-b0d2-1fe75f5a3345
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: event_processed_utc_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column event_enqueued_utc_time
+		dataType: dateTime
+		formatString: mm/dd/yy hh:nn:ss AM/PM
+		lineageTag: a94a4bad-575d-41f4-8006-7b60219a4eba
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: event_enqueued_utc_time
+
+		annotation SummarizationSetBy = Automatic
+
+	partition stream_alerts = entity
+		mode: directQuery
+		source
+			entityName: stream_alerts
+			expressionSource: 'De DirectQuery a AS: tfmasajob_alerts'
+

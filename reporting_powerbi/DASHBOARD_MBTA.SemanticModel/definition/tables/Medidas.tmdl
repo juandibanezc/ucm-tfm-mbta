@@ -1,0 +1,147 @@
+table Medidas
+	lineageTag: 4ae75f5d-2edb-4dd1-9c70-be0cdfbdd520
+
+	measure 'Total Trips' = ```
+			
+			COUNT ( Data_Trips_metrics[trip_id] )
+			
+			```
+		formatString: #,0
+		displayFolder: Métricas viajes
+		lineageTag: 9d09f069-87cb-4b27-b1a6-59dadb2a7db6
+
+	measure 'Avg Trip Duration (min)' = ```
+			
+			AVERAGE ( Data_Trips_metrics[duration_minutes] )
+			
+			```
+		formatString: 0.00
+		displayFolder: Métricas viajes
+		lineageTag: bc276e51-5c08-4255-ad7c-4cc9449b2987
+
+	measure 'Avg Stops per Trip' = ```
+			
+			AVERAGE ( Data_Trips_metrics[num_stops] )
+			
+			```
+		displayFolder: Métricas viajes
+		lineageTag: 08f08d00-7677-4366-958a-eb6552166e36
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Avg Trips per Day' = ```
+			
+			AVERAGEX (
+			    VALUES ( Data_Trips_metrics[service_date] ),
+			    CALCULATE ( COUNT ( Data_Trips_metrics[trip_id] ) )
+			)
+			
+			```
+		displayFolder: Métricas viajes
+		lineageTag: 40c47388-3aca-4dbe-932a-80fa03b7067a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Maxima Probabilidad' = MAX(Data_Routes_forecast[max_probability_precipitation])
+		formatString: 0
+		displayFolder: Métricas viajes
+		lineageTag: eb5831a6-ddbb-4469-906e-da660cc42a3e
+
+	measure 'Fecha Forecast' = ```
+			MAX(Data_Routes_forecast[service_date]) 
+			```
+		formatString: General Date
+		displayFolder: Métricas viajes
+		lineageTag: 60c16361-96c9-4a3a-a2ea-e3f7f386a17d
+
+	measure 'Vehiculos Activos' = ```
+			
+			DISTINCTCOUNT(stream_vehicles[vehicle_id])
+			
+			```
+		formatString: 0
+		displayFolder: Métricas Operativas
+		lineageTag: f8322646-4897-4ad5-b188-59d8745ec07b
+
+	measure 'Velocidad Promedio' =
+			
+			AVERAGE(stream_vehicles[speed])
+		displayFolder: Métricas Operativas
+		lineageTag: 6b167e4f-3cd7-4b0f-bf5d-7d49ac82c2af
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Vehículos en Transito' = ```
+			
+			CALCULATE(
+			    COUNTROWS(stream_vehicles),
+			    stream_vehicles[current_status] = "IN_TRANSIT_TO"
+			)
+			
+			```
+		formatString: 0
+		displayFolder: Métricas Operativas
+		lineageTag: 31da9236-46fe-4468-a726-953b32ce86ce
+
+	measure 'Vehiculos Detenidos' = ```
+			
+			CALCULATE(
+			    COUNTROWS(stream_vehicles),
+			    stream_vehicles[current_status] = "STOPPED_AT"
+			)
+			
+			```
+		formatString: 0
+		displayFolder: Métricas Operativas
+		lineageTag: 05a1af79-e607-480d-abf5-19eed1ad4cee
+
+	measure 'Alertas Activas' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(stream_alerts[alert_id]),
+			    stream_alerts[is_active_alert] = 1
+			)
+		formatString: 0
+		displayFolder: Métricas Operativas
+		lineageTag: 8f1aa17c-db52-44fb-9cc7-749db381d2dc
+
+	measure 'Duración Promedio Alertas (min)' =
+			
+			AVERAGE(stream_alerts[alert_duration_minutes])
+		displayFolder: Métricas Operativas
+		lineageTag: 3f1d435b-cda4-4419-9d2f-f1a863cd373c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Predicciones Activas' = ```
+			
+			DISTINCTCOUNT(stream_predictions[prediction_id])
+			
+			```
+		formatString: 0
+		displayFolder: Métricas Operativas
+		lineageTag: 4f11c6e1-6cc7-4171-9af8-c5776d244193
+
+	measure 'Última Actualización' =
+			
+			"Última actualización realizada el "
+			& FORMAT ( MAX ( stream_vehicles[event_processed_utc_time] ), "dd/MM/yyyy HH:mm:ss" )
+			& " UTC"
+		displayFolder: Métricas Operativas
+		lineageTag: 01b19f93-98a8-40ee-ac52-b851ab8eda98
+
+	column Medida
+		formatString: 0
+		lineageTag: e73cd41a-a7d7-4298-980e-6e7d0ddc6e94
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Medida]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Medidas = calculated
+		mode: import
+		source = ROW("Medida", BLANK())
+
+	annotation PBI_Id = 8c76ae7619ae47849345a70bb845de79
+

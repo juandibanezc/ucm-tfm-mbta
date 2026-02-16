@@ -1,0 +1,113 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 361.06872558593295,
+        "y": 428.24429321288522
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 817.76037151117191,
+            "y": 531.44162757621609
+          },
+          "nodeIndex": "Data_Trips_metrics",
+          "nodeLineageTag": "fad2e498-457c-40c7-8714-9444b51a7970",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 906.43175454825916,
+            "y": 1044.272575431751
+          },
+          "nodeIndex": "Medidas",
+          "nodeLineageTag": "4ae75f5d-2edb-4dd1-9c70-be0cdfbdd520",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 911.77045654544054,
+            "y": 910.56094334826071
+          },
+          "nodeIndex": "Ultima_Actualizacion",
+          "nodeLineageTag": "3fefe8d2-b320-4260-b7f7-1b6131c31cd6",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 1512.3286169628955,
+            "y": 584.230892265592
+          },
+          "nodeIndex": "Data_Routes_forecast",
+          "nodeLineageTag": "5d84ea3b-1f5d-488b-a16b-862b02ea4c64",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 464.56824545173004,
+            "y": 1033.7203812707085
+          },
+          "nodeIndex": "stream_alerts",
+          "nodeLineageTag": "34837e5b-8926-4940-ae62-ba0198f85fa5",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 465.56824545172992,
+            "y": 703.15202115407669
+          },
+          "nodeIndex": "stream_predictions",
+          "nodeLineageTag": "1119a69b-2404-4fe9-9c77-2a0b3c50b288",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 468.56824545173015,
+            "y": 374.94428419019579
+          },
+          "nodeIndex": "stream_vehicles",
+          "nodeLineageTag": "9f70fc2f-cf5d-43d6-8e0a-89c80034d4b2",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 6
+        }
+      ],
+      "name": "Todas las tablas",
+      "zoomValue": 100.00000000000126,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas las tablas",
+  "defaultDiagram": "Todas las tablas"
+}

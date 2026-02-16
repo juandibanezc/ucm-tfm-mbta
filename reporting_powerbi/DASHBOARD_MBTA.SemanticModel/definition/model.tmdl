@@ -1,0 +1,39 @@
+model Model
+	culture: es-ES
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-CO
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+/// Este grupo contiene las tablas limpias y listas para ser utilizadas en el modelo del proyecto. Listas para medidas y construcción de visualizaciones.
+queryGroup DATA
+
+	annotation PBI_QueryGroupOrder = 2
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["Data_Routes_forecast","Data_Trips_metrics","Ultima_Actualizacion","De DirectQuery a AS: tfmasajob_alerts","De DirectQuery a AS: tfmasajob_predictions","De DirectQuery a AS: tfmasajob_vehicles"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table DateTableTemplate_1357ee6d-c1ff-47b2-a65f-0bbabfce4677
+ref table Medidas
+ref table Ultima_Actualizacion
+ref table LocalDateTable_f5d9171b-3a1c-4025-b37e-34d50a73ad65
+ref table Data_Routes_forecast
+ref table LocalDateTable_7970b1bf-ad48-4c4a-b8a8-70ff393225e4
+ref table LocalDateTable_c37a969d-8517-41e0-b298-28e5b06a9c02
+ref table LocalDateTable_67dc8d62-c796-43e1-bf58-3ffd5fe77072
+ref table Data_Trips_metrics
+ref table LocalDateTable_4b9cbdeb-74fc-4165-8d83-95f2bfb68aec
+ref table LocalDateTable_1a226c11-c3f0-4b2f-a3b4-9a48d9c4f824
+ref table LocalDateTable_3250cc98-0ca9-4fde-9bff-e021780e16bc
+ref table LocalDateTable_992d1534-0280-4a76-b7a8-dcfb02ea1da2
+ref table LocalDateTable_2a47c0cd-76f9-4e8e-ac03-3ca84822fdeb
+ref table stream_alerts
+ref table stream_predictions
+ref table stream_vehicles
+
+ref cultureInfo es-ES
+
